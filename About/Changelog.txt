@@ -1,0 +1,4 @@
+# Changelog for YayosCombat3
+
+1.3.1 - Fixed some missing translations
+
