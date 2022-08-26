@@ -14,11 +14,6 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2513695736
 	
 ![Image](https://i.imgur.com/Z4GOv8H.png)
 
-# *** 1.3**
-
-https://steamcommunity.com/sharedfiles/filedetails/?id=2513695736
-
-
 
 # *** Completely changes the combat animation and system**
 
@@ -153,8 +148,6 @@ You can set the loadout of ammo and medicine in the drug policy.
 
 
 
-
-
 # *** Compatibility**
 
 
@@ -165,14 +158,10 @@ Weapons and armor added by most mods will automatically apply this mod's effect.
 
 
 
-
-
 # *** Incompatible mods**
 
 
 - SheathYourSword (all animation is not work)
-
-
 
 
 
@@ -193,16 +182,10 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=1588616696
 https://steamcommunity.com/sharedfiles/filedetails/?id=1729446857
 
 
-
-
-
 # *** Special thanks**
 
 - Nemomone3003 ( ammo graphic art )
 - Densevoid (Coding help)
-
-
-
 
 # *** Tutorial for modders**
 
@@ -212,9 +195,7 @@ https://github.com/rimworldYayo/Yayo-s-Combat/wiki/
 
 
 
-
 ![Image](https://i.imgur.com/p7Fv1Z6.gif)
-
 
 
 

@@ -8,6 +8,7 @@ namespace yayoCombat;
 [HarmonyPatch("StartingTicksToImpact", MethodType.Getter)]
 internal static class yayoStartingTicksToImpact
 {
+    [HarmonyPrefix]
     public static bool Prefix(Projectile __instance, Vector3 ___origin, Vector3 ___destination, ref float __result)
     {
         if (__instance.def.projectile.flyOverhead ||

@@ -7,7 +7,7 @@ namespace yayoCombat;
 [HarmonyPatch(typeof(TraderKindDef), "WillTrade")]
 internal class patch_TraderKindDef_WillTrade
 {
-    [HarmonyPostfix]
+    [HarmonyPrefix]
     private static bool Prefix(ref bool __result, TraderKindDef __instance, ThingDef td)
     {
         if (!yayoCombat.ammo)

@@ -8,7 +8,7 @@ namespace yayoCombat;
 public static class patch_DrawEquipmentAiming
 {
     [HarmonyPrefix]
-    private static bool Prefix(PawnRenderer __instance, Thing eq, Vector3 drawLoc, float aimAngle, Pawn ___pawn)
+    private static bool Prefix(Thing eq, Vector3 drawLoc, float aimAngle, Pawn ___pawn)
     {
         if (!yayoCombat.advAni)
         {

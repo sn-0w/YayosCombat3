@@ -7,7 +7,7 @@ namespace yayoCombat;
 [HarmonyPatch(typeof(ThingFilter), "SetFromPreset")]
 internal class patch_ThingFilter_SetFromPreset
 {
-    [HarmonyPostfix]
+    [HarmonyPrefix]
     private static bool Prefix(ThingFilter __instance, StorageSettingsPreset preset)
     {
         if (!yayoCombat.ammo)

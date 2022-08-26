@@ -7,7 +7,7 @@ namespace yayoCombat;
 [HarmonyPatch(typeof(Pawn_MeleeVerbs), "ChooseMeleeVerb")]
 internal class Pawn_MeleeVerbs_ChooseMeleeVerb_Patch
 {
-    [HarmonyPostfix]
+    [HarmonyPrefix]
     private static bool Prefix(Pawn_MeleeVerbs __instance, Thing target)
     {
         if (!yayoCombat.advAni)

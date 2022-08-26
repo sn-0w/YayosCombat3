@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using RimWorld;
 
 namespace yayoCombat;
@@ -7,34 +7,23 @@ namespace yayoCombat;
 internal class patch_CompReloadable_UsedOnce
 {
     [HarmonyPostfix]
-    private static bool Prefix(CompReloadable __instance, ref int ___remainingCharges)
+    private static void Postfix(CompReloadable __instance)
     {
-        if (!yayoCombat.ammo)
+        if (!yayoCombat.ammo || __instance.Wearer == null)
         {
-            return true;
+            return;
         }
 
-        if (___remainingCharges > 0)
+        // 남은 탄약이 0 일경우 게임튕김 방지를 위해 사냥 중지
+        if (__instance.RemainingCharges == 0)
         {
-            ___remainingCharges--;
+            if (__instance.Wearer.CurJobDef == JobDefOf.Hunt)
+            {
+                __instance.Wearer.jobs.StopAll();
+            }
         }
 
-        if (__instance.Props.destroyOnEmpty && __instance.RemainingCharges == 0 && !__instance.parent.Destroyed)
-        {
-            __instance.parent.Destroy();
-        }
-
-        if (__instance.Wearer == null)
-        {
-            return false;
-        }
-
-        if (___remainingCharges == 0 && __instance.Wearer.CurJobDef == JobDefOf.Hunt)
-        {
-            __instance.Wearer.jobs.StopAll();
-        }
-
+        // 알아서 장전 ai
         reloadUtility.tryAutoReload(__instance);
-        return false;
     }
 }

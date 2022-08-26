@@ -9,52 +9,32 @@ namespace yayoCombat;
 internal class patch_ThingWithComps_GetGizmos
 {
     [HarmonyPostfix]
-    private static bool Prefix(ref IEnumerable<Gizmo> __result, Pawn_EquipmentTracker __instance)
+    private static IEnumerable<Gizmo> Postfix(IEnumerable<Gizmo> __result, Pawn_EquipmentTracker __instance)
     {
+        foreach (var gizmo in __result)
+        {
+            yield return gizmo;
+        }
+
         if (!yayoCombat.ammo)
         {
-            return true;
+            yield break;
         }
 
-        var list = new List<Gizmo>();
-        if (PawnAttackGizmoUtility.CanShowEquipmentGizmos())
+        if (!PawnAttackGizmoUtility.CanShowEquipmentGizmos())
         {
-            var allEquipmentListForReading = __instance.AllEquipmentListForReading;
-            for (var i = 0; i < allEquipmentListForReading.Count; i++)
-            {
-                foreach (var verbsCommand in allEquipmentListForReading[i].GetComp<CompEquippable>().GetVerbsCommands())
-                {
-                    switch (i)
-                    {
-                        case 0:
-                            verbsCommand.hotKey = KeyBindingDefOf.Misc1;
-                            break;
-                        case 1:
-                            verbsCommand.hotKey = KeyBindingDefOf.Misc2;
-                            break;
-                        case 2:
-                            verbsCommand.hotKey = KeyBindingDefOf.Misc3;
-                            break;
-                    }
+            yield break;
+        }
 
-                    list.Add(verbsCommand);
-                }
-            }
-
-            foreach (var thingWithComps in allEquipmentListForReading)
+        foreach (var thing in __instance.AllEquipmentListForReading)
+        {
+            foreach (var comp in thing.AllComps)
             {
-                var list2 = thingWithComps.AllComps;
-                foreach (var thingComp in list2)
+                foreach (var gizmo in comp.CompGetWornGizmosExtra())
                 {
-                    foreach (var item in thingComp.CompGetWornGizmosExtra())
-                    {
-                        list.Add(item);
-                    }
+                    yield return gizmo;
                 }
             }
         }
-
-        __result = list;
-        return false;
     }
 }

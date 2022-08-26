@@ -9,58 +9,39 @@ namespace yayoCombat;
 internal class patch_ReloadableUtility_FindPotentiallyReloadableGear
 {
     [HarmonyPostfix]
-    private static bool Prefix(ref IEnumerable<Pair<CompReloadable, Thing>> __result, Pawn pawn,
-        List<Thing> potentialAmmo)
+    private static IEnumerable<Pair<CompReloadable, Thing>> Postfix(IEnumerable<Pair<CompReloadable, Thing>> __result,
+        Pawn pawn, List<Thing> potentialAmmo)
     {
+        foreach (var pair in __result)
+        {
+            yield return pair;
+        }
+
         if (!yayoCombat.ammo)
         {
-            return true;
+            yield break;
         }
 
-        var list = new List<Pair<CompReloadable, Thing>>();
-        if (pawn.apparel != null)
+        if (pawn.equipment == null)
         {
-            var wornApparel = pawn.apparel.WornApparel;
-            foreach (var apparel in wornApparel)
-            {
-                var compReloadable = apparel.TryGetComp<CompReloadable>();
-                if (compReloadable?.AmmoDef == null)
-                {
-                    continue;
-                }
+            yield break;
+        }
 
-                foreach (var thing in potentialAmmo)
+        foreach (var thing in pawn.equipment.AllEquipmentListForReading)
+        {
+            var comp = thing.TryGetComp<CompReloadable>();
+            if (comp?.AmmoDef == null)
+            {
+                continue;
+            }
+
+            foreach (var ammoThing in potentialAmmo)
+            {
+                if (ammoThing?.def == comp.Props.ammoDef)
                 {
-                    if (thing.def == compReloadable.Props.ammoDef)
-                    {
-                        list.Add(new Pair<CompReloadable, Thing>(compReloadable, thing));
-                    }
+                    yield return new Pair<CompReloadable, Thing>(comp, ammoThing);
                 }
             }
         }
-
-        if (pawn.equipment != null)
-        {
-            var allEquipmentListForReading = pawn.equipment.AllEquipmentListForReading;
-            foreach (var thingWithComps in allEquipmentListForReading)
-            {
-                var compReloadable2 = thingWithComps.TryGetComp<CompReloadable>();
-                if (compReloadable2?.AmmoDef == null)
-                {
-                    continue;
-                }
-
-                foreach (var thing2 in potentialAmmo)
-                {
-                    if (thing2.def == compReloadable2.Props.ammoDef)
-                    {
-                        list.Add(new Pair<CompReloadable, Thing>(compReloadable2, thing2));
-                    }
-                }
-            }
-        }
-
-        __result = list;
-        return false;
     }
 }

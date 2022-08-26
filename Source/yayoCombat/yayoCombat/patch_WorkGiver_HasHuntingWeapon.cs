@@ -8,25 +8,19 @@ namespace yayoCombat;
 internal class patch_WorkGiver_HasHuntingWeapon
 {
     [HarmonyPostfix]
-    private static bool Prefix(ref bool __result, Pawn p)
+    private static bool Postfix(bool __result, Pawn p)
     {
-        if (!yayoCombat.ammo)
+        if (!yayoCombat.ammo || !__result)
         {
-            return true;
+            return __result;
         }
 
-        if (p.equipment.Primary != null && p.equipment.Primary.def.IsRangedWeapon &&
-            p.equipment.PrimaryEq.PrimaryVerb.HarmsHealth() &&
-            !p.equipment.PrimaryEq.PrimaryVerb.UsesExplosiveProjectiles())
+        var comp = p.equipment.Primary.GetComp<CompReloadable>();
+        if (comp != null)
         {
-            __result = p.equipment.Primary.GetComp<CompReloadable>() == null ||
-                       p.equipment.Primary.GetComp<CompReloadable>().CanBeUsed;
-        }
-        else
-        {
-            __result = false;
+            __result = comp.CanBeUsed;
         }
 
-        return false;
+        return __result;
     }
 }

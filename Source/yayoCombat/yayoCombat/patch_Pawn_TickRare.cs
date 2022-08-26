@@ -7,6 +7,7 @@ namespace yayoCombat;
 [HarmonyPatch(typeof(Pawn), "Tick")]
 internal class patch_Pawn_TickRare
 {
+    [HarmonyPostfix]
     [HarmonyPriority(0)]
     private static void Postfix(Pawn __instance)
     {

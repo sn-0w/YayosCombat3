@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Reflection.Emit;
 using HarmonyLib;
 using RimWorld;
 using UnityEngine;
@@ -9,121 +12,199 @@ namespace yayoCombat;
 [HarmonyPatch(typeof(ThingSetMaker_TraderStock), "Generate")]
 internal class patch_ThingSetMaker_TraderStock_Generate
 {
-    [HarmonyPostfix]
-    private static bool Prefix(ThingSetMaker_TraderStock __instance, ThingSetMakerParams parms, List<Thing> outThings)
+    [HarmonyTranspiler]
+    private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
     {
-        if (!yayoCombat.ammo)
+        CodeInstruction returnInstruction = null;
+        // Original code
+        foreach (var instruction in instructions)
         {
-            return true;
-        }
-
-        var hasRangedWeapons = false;
-        var traderKindDef = parms.traderDef ?? DefDatabase<TraderKindDef>.AllDefsListForReading.RandomElement();
-        if (traderKindDef is { defName: "Empire_Caravan_TributeCollector" })
-        {
-            return true;
-        }
-
-        var makingFaction = parms.makingFaction;
-        var forTile = parms.tile ?? (Find.AnyPlayerHomeMap != null ? Find.AnyPlayerHomeMap.Tile :
-            Find.CurrentMap == null ? -1 : Find.CurrentMap.Tile);
-        foreach (var stockGenerator in traderKindDef.stockGenerators)
-        {
-            if (stockGenerator is StockGenerator_WeaponsRanged)
+            if (instruction.opcode == OpCodes.Ret)
             {
-                hasRangedWeapons = true;
+                returnInstruction = instruction;
             }
-
-            foreach (var item in stockGenerator.GenerateThings(forTile, parms.makingFaction))
+            else
             {
-                if (!item.def.tradeability.TraderCanSell())
-                {
-                    Log.Error(traderKindDef + " generated carrying " + item +
-                              " which can't be sold by traders. Ignoring...");
-                    continue;
-                }
-
-                item.PostGeneratedForTrader(traderKindDef, forTile, makingFaction);
-                outThings.Add(item);
+                yield return instruction;
             }
         }
 
-        if (!hasRangedWeapons && !(Rand.Value <= 0.2f))
+        // New code
+        yield return new CodeInstruction(OpCodes.Ldloc_0);
+        yield return new CodeInstruction(OpCodes.Ldloc_1);
+        yield return new CodeInstruction(OpCodes.Ldloc_2);
+        yield return new CodeInstruction(OpCodes.Ldarg_2);
+        yield return new CodeInstruction(OpCodes.Call,
+            typeof(patch_ThingSetMaker_TraderStock_Generate).GetMethod(
+                nameof(AddAmmo),
+                BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic));
+        yield return returnInstruction;
+    }
+
+    private static void AddAmmo(TraderKindDef traderKindDef, Faction makingFaction, int forTile, List<Thing> outThings)
+    {
+        var tradeTagFieldInfo =
+            typeof(StockGenerator_Tag).GetField("TradeTag", BindingFlags.NonPublic | BindingFlags.Instance);
+        var isWeaponsTrader = traderKindDef.stockGenerators.FirstOrDefault(s => s is StockGenerator_WeaponsRanged) !=
+                              null;
+        var isExoticTrader = !isWeaponsTrader &&
+                             traderKindDef.stockGenerators.FirstOrDefault(s => s is StockGenerator_Tag tag &&
+                                                                               (string)tradeTagFieldInfo
+                                                                                   ?.GetValue(tag) == "ExoticMisc") !=
+                             null;
+        if (!traderKindDef.defName.ToLower().Contains("bulkgoods")
+            && !isWeaponsTrader
+            && !isExoticTrader
+            && !(Rand.Value <= 0.33f))
         {
-            return false;
+            return;
         }
 
-        var techLevel = TechLevel.Spacer;
-        if (makingFaction is { def: { } })
+        var tech = TechLevel.Spacer;
+        if (makingFaction?.def != null)
         {
-            techLevel = makingFaction.def.techLevel;
+            tech = makingFaction.def.techLevel;
         }
 
-        var num = 300f;
-        var min = 0.4f;
-        var max = 1.6f;
-        if ((int)techLevel < 2)
+        if (tech < TechLevel.Neolithic)
         {
-            return false;
+            return;
         }
+
+        var amount = 400f;
+        var min = 0.25f;
+        var max = 1.50f;
 
         Thing thing;
-        if ((int)techLevel >= 2 && (int)techLevel <= 3 || Rand.Value <= 0.3f)
+
+        // ?? ??
+        var rnd = Rand.Value;
+        int count;
+        if (!isExoticTrader
+            && (tech <= TechLevel.Medieval // 100% for Neolithic & Medieval
+                || tech <= TechLevel.Industrial && rnd <= 0.2f //  20% for Industrial
+                || rnd <= 0.1f)) //  10% for Post-Industrial
         {
-            thing = ThingMaker.MakeThing(ThingDef.Named("yy_ammo_primitive"));
-            thing.stackCount = Mathf.RoundToInt(Rand.Range(min, max) * yayoCombat.ammoGen * num);
-            thing.PostGeneratedForTrader(traderKindDef, forTile, makingFaction);
-            outThings.Add(thing);
+            var primitiveAmount = amount;
+            if (tech > TechLevel.Medieval)
+            {
+                primitiveAmount *= 0.5f;
+            }
+
+            count = Mathf.RoundToInt(Rand.Range(min, max) * yayoCombat.ammoGen * primitiveAmount);
+            if (count > 20)
+            {
+                thing = ThingMaker.MakeThing(ThingDef.Named("yy_ammo_primitive"));
+                thing.stackCount = count;
+                thing.PostGeneratedForTrader(traderKindDef, forTile, makingFaction);
+                outThings.Add(thing);
+            }
+
+            count = Mathf.RoundToInt(Rand.Range(min, max) * yayoCombat.ammoGen * primitiveAmount * 0.40f);
+            if (count > 20)
+            {
+                thing = ThingMaker.MakeThing(ThingDef.Named("yy_ammo_primitive_fire"));
+                thing.stackCount = count;
+                thing.PostGeneratedForTrader(traderKindDef, forTile, makingFaction);
+                outThings.Add(thing);
+            }
+
+            count = Mathf.RoundToInt(Rand.Range(min, max) * yayoCombat.ammoGen * primitiveAmount * 0.25f);
+            if (count > 20)
+            {
+                thing = ThingMaker.MakeThing(ThingDef.Named("yy_ammo_primitive_emp"));
+                thing.stackCount = count;
+                thing.PostGeneratedForTrader(traderKindDef, forTile, makingFaction);
+                outThings.Add(thing);
+            }
         }
 
-        if ((int)techLevel >= 4 || Rand.Value <= 0.2f)
+
+        // ?? ??
+        rnd = Rand.Value;
+        if (!isExoticTrader
+            && (tech == TechLevel.Industrial // 100% for Industrial
+                || tech > TechLevel.Industrial && rnd <= 0.8f //  80% for Post-Industrial
+                || rnd <= 0.2f)) //  20% for Pre-Industrial
         {
-            thing = ThingMaker.MakeThing(ThingDef.Named("yy_ammo_industrial"));
-            thing.stackCount = Mathf.RoundToInt(Rand.Range(min, max) * yayoCombat.ammoGen * num);
-            thing.PostGeneratedForTrader(traderKindDef, forTile, makingFaction);
-            outThings.Add(thing);
+            var industrialAmount = amount;
+            if (tech < TechLevel.Industrial)
+            {
+                industrialAmount /= (int)TechLevel.Industrial - (int)tech;
+            }
+
+            count = Mathf.RoundToInt(Rand.Range(min, max) * yayoCombat.ammoGen * industrialAmount);
+            if (count > 20)
+            {
+                thing = ThingMaker.MakeThing(ThingDef.Named("yy_ammo_industrial"));
+                thing.stackCount = count;
+                thing.PostGeneratedForTrader(traderKindDef, forTile, makingFaction);
+                outThings.Add(thing);
+            }
+
+            count = Mathf.RoundToInt(Rand.Range(min, max) * yayoCombat.ammoGen * industrialAmount * 0.40f);
+            if (count > 20)
+            {
+                thing = ThingMaker.MakeThing(ThingDef.Named("yy_ammo_industrial_fire"));
+                thing.stackCount = count;
+                thing.PostGeneratedForTrader(traderKindDef, forTile, makingFaction);
+                outThings.Add(thing);
+            }
+
+            count = Mathf.RoundToInt(Rand.Range(min, max) * yayoCombat.ammoGen * industrialAmount * 0.25f);
+            if (count > 20)
+            {
+                thing = ThingMaker.MakeThing(ThingDef.Named("yy_ammo_industrial_emp"));
+                thing.stackCount = count;
+                thing.PostGeneratedForTrader(traderKindDef, forTile, makingFaction);
+                outThings.Add(thing);
+            }
         }
 
-        if ((int)techLevel >= 4 || Rand.Value <= 0.2f)
+
+        // ?? ??
+        rnd = Rand.Value;
+        if (!isExoticTrader
+            && tech < TechLevel.Spacer && ( // 100% for Spacer & Post-Spacer
+                tech != TechLevel.Industrial || !(rnd <= 0.5f)) && !( //  50% for Industrial
+                rnd <= 0.1f)) //  10% for Pre-Industrial
         {
-            thing = ThingMaker.MakeThing(ThingDef.Named("yy_ammo_industrial_fire"));
-            thing.stackCount = Mathf.RoundToInt(Rand.Range(min, max) * yayoCombat.ammoGen * num * 0.5f);
-            thing.PostGeneratedForTrader(traderKindDef, forTile, makingFaction);
-            outThings.Add(thing);
+            return;
         }
 
-        if ((int)techLevel >= 4 || Rand.Value <= 0.2f)
+        var spacerAmount = amount;
+        if (tech < TechLevel.Spacer)
         {
-            thing = ThingMaker.MakeThing(ThingDef.Named("yy_ammo_industrial_emp"));
-            thing.stackCount = Mathf.RoundToInt(Rand.Range(min, max) * yayoCombat.ammoGen * num * 0.25f);
-            thing.PostGeneratedForTrader(traderKindDef, forTile, makingFaction);
-            outThings.Add(thing);
+            spacerAmount /= (int)TechLevel.Spacer - (int)tech;
         }
 
-        if ((int)techLevel >= 5 || Rand.Value <= 0.2f)
+        count = Mathf.RoundToInt(Rand.Range(min, max) * yayoCombat.ammoGen * spacerAmount);
+        if (count > 20)
         {
             thing = ThingMaker.MakeThing(ThingDef.Named("yy_ammo_spacer"));
-            thing.stackCount = Mathf.RoundToInt(Rand.Range(min, max) * yayoCombat.ammoGen * num);
+            thing.stackCount = count;
             thing.PostGeneratedForTrader(traderKindDef, forTile, makingFaction);
             outThings.Add(thing);
         }
 
-        if ((int)techLevel >= 5 || Rand.Value <= 0.2f)
+        count = Mathf.RoundToInt(Rand.Range(min, max) * yayoCombat.ammoGen * spacerAmount * 0.40f);
+        if (count > 20)
         {
             thing = ThingMaker.MakeThing(ThingDef.Named("yy_ammo_spacer_fire"));
-            thing.stackCount = Mathf.RoundToInt(Rand.Range(min, max) * yayoCombat.ammoGen * num * 0.5f);
+            thing.stackCount = count;
             thing.PostGeneratedForTrader(traderKindDef, forTile, makingFaction);
             outThings.Add(thing);
         }
 
-        if ((int)techLevel >= 5 || Rand.Value <= 0.2f)
+        count = Mathf.RoundToInt(Rand.Range(min, max) * yayoCombat.ammoGen * spacerAmount * 0.25f);
+        if (count <= 20)
         {
-            thing = ThingMaker.MakeThing(ThingDef.Named("yy_ammo_spacer_emp"));
-            thing.stackCount = Mathf.RoundToInt(Rand.Range(min, max) * yayoCombat.ammoGen * num * 0.25f);
-            thing.PostGeneratedForTrader(traderKindDef, forTile, makingFaction);
-            outThings.Add(thing);
+            return;
         }
 
-        return false;
+        thing = ThingMaker.MakeThing(ThingDef.Named("yy_ammo_spacer_emp"));
+        thing.stackCount = count;
+        thing.PostGeneratedForTrader(traderKindDef, forTile, makingFaction);
+        outThings.Add(thing);
     }
 }

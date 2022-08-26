@@ -46,7 +46,7 @@ internal class reloadUtility
         cp.Props.soundReload.PlayOneShot(new TargetInfo(p.Position, p.Map));
     }
 
-    internal static void TryThingEjectAmmoDirect(Thing w, bool forbidden = false)
+    internal static void TryThingEjectAmmoDirect(Thing w, bool forbidden = false, Pawn pawn = null)
     {
         if (!w.def.IsWeapon || w.TryGetComp<CompReloadable>() == null)
         {
@@ -71,7 +71,14 @@ internal class reloadUtility
             }
 
             num -= thing.stackCount;
-            GenPlace.TryPlaceThing(thing, w.Position, w.Map, ThingPlaceMode.Near);
+            if (pawn != null)
+            {
+                GenPlace.TryPlaceThing(thing, pawn.Position, pawn.Map, ThingPlaceMode.Near);
+            }
+            else
+            {
+                GenPlace.TryPlaceThing(thing, w.Position, w.Map, ThingPlaceMode.Near);
+            }
         }
     }
 

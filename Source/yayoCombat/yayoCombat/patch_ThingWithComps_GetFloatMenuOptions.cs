@@ -8,6 +8,7 @@ namespace yayoCombat;
 [HarmonyPatch(typeof(ThingWithComps), "GetFloatMenuOptions")]
 internal class patch_ThingWithComps_GetFloatMenuOptions
 {
+    [HarmonyPostfix]
     [HarmonyPriority(0)]
     private static void Postfix(ref IEnumerable<FloatMenuOption> __result, ThingWithComps __instance, Pawn selPawn)
     {

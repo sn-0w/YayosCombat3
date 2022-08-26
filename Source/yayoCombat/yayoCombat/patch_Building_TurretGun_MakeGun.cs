@@ -6,7 +6,7 @@ namespace yayoCombat;
 [HarmonyPatch(typeof(Building_TurretGun), "MakeGun")]
 internal class patch_Building_TurretGun_MakeGun
 {
-    [HarmonyPostfix]
+    [HarmonyPrefix]
     private static bool Prefix(Building_TurretGun __instance)
     {
         if (!yayoCombat.ammo)

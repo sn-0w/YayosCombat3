@@ -8,7 +8,8 @@ namespace yayoCombat;
 [HarmonyPatch(typeof(StatPart_ReloadMarketValue), "TransformAndExplain")]
 public class Patch_StatPart_ReloadMarketValue_TransformAndExplain
 {
-    public static bool Prefix(StatRequest req, ref float val, StringBuilder explanation)
+    [HarmonyPrefix]
+    private static bool Prefix(StatRequest req, ref float val, StringBuilder explanation)
     {
         if (req.Thing is not { def.IsRangedWeapon: true })
         {

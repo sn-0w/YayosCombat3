@@ -6,6 +6,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 using ApparelLayerDefOf = yayoCombat_Defs.ApparelLayerDefOf;
+using BodyPartGroupDefOf = yayoCombat_Defs.BodyPartGroupDefOf;
 
 namespace yayoCombat;
 
@@ -331,9 +332,7 @@ public class yayoCombat : ModBase
             }
 
             foreach (var item2 in DefDatabase<ThingDef>.AllDefs.Where(thing => thing.apparel is
-                     {
-                         bodyPartGroups.Count: > 0
-                     }))
+                         { bodyPartGroups.Count: > 0 }))
             {
                 var bodyPartGroups = item2.apparel.bodyPartGroups;
                 if (bodyPartGroups.Contains(BodyPartGroupDefOf.Arms) &&

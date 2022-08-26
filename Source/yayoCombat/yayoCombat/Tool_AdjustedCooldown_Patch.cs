@@ -7,6 +7,7 @@ namespace yayoCombat;
 [HarmonyPatch(typeof(Tool), "AdjustedCooldown", typeof(Thing))]
 internal class Tool_AdjustedCooldown_Patch
 {
+    [HarmonyPostfix]
     [HarmonyPriority(0)]
     private static void Postfix(ref float __result, Thing ownerEquipment)
     {

@@ -1,7 +1,7 @@
 using RimWorld;
 using Verse;
 
-namespace yayoCombat;
+namespace yayoCombat_Defs;
 
 [DefOf]
 public static class BodyPartGroupDefOf

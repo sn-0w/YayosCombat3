@@ -11,6 +11,7 @@ internal class patch_DrugPolicy_InitializeIfNeeded
     private static readonly AccessTools.FieldRef<DrugPolicy, List<DrugPolicyEntry>> s_entriesInt =
         AccessTools.FieldRefAccess<DrugPolicy, List<DrugPolicyEntry>>("entriesInt");
 
+    [HarmonyPrefix]
     [HarmonyPriority(0)]
     private static bool Prefix(DrugPolicy __instance)
     {

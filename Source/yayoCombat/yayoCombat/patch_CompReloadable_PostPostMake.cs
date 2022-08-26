@@ -8,6 +8,7 @@ namespace yayoCombat;
 [HarmonyPatch(typeof(CompReloadable), "PostPostMake")]
 internal class patch_CompReloadable_PostPostMake
 {
+    [HarmonyPostfix]
     [HarmonyPriority(0)]
     private static void Postfix(CompReloadable __instance, ref int ___remainingCharges)
     {
@@ -16,12 +17,8 @@ internal class patch_CompReloadable_PostPostMake
             return;
         }
 
-        if (GenTicks.TicksGame <= 5)
-        {
-            ___remainingCharges = Mathf.RoundToInt(__instance.MaxCharges * yayoCombat.s_enemyAmmo);
-            return;
-        }
-
-        ___remainingCharges = 0;
+        ___remainingCharges = GenTicks.TicksGame <= 5
+            ? Mathf.RoundToInt(__instance.MaxCharges * yayoCombat.s_enemyAmmo)
+            : 0;
     }
 }

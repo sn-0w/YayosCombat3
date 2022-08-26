@@ -7,7 +7,7 @@ namespace yayoCombat;
 [HarmonyPatch(typeof(Pawn_DrugPolicyTracker), "AllowedToTakeToInventory")]
 internal class patch_Pawn_DrugPolicyTracker_AllowedToTakeToInventory
 {
-    [HarmonyPostfix]
+    [HarmonyPrefix]
     private static bool Prefix(ref bool __result, Pawn_DrugPolicyTracker __instance, ThingDef thingDef)
     {
         if (!yayoCombat.ammo)

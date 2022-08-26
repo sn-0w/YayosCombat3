@@ -8,8 +8,8 @@ namespace yayoCombat;
 [HarmonyPatch(typeof(JobGiver_MoveDrugsToInventory), "FindDrugFor")]
 internal class patch_JobGiver_MoveDrugsToInventory_FindDrugFor
 {
-    [HarmonyPostfix]
-    private static bool Prefix(ref Thing __result, JobGiver_MoveDrugsToInventory __instance, Pawn pawn,
+    [HarmonyPrefix]
+    private static bool Prefix(ref Thing __result, Pawn pawn,
         ThingDef drugDef)
     {
         if (!yayoCombat.ammo)

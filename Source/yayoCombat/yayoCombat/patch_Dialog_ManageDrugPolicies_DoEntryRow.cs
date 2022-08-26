@@ -8,8 +8,8 @@ namespace yayoCombat;
 [HarmonyPatch(typeof(Dialog_ManageDrugPolicies), "DoEntryRow")]
 internal class patch_Dialog_ManageDrugPolicies_DoEntryRow
 {
-    [HarmonyPostfix]
-    private static bool Prefix(Dialog_ManageDrugPolicies __instance, Rect rect, DrugPolicyEntry entry)
+    [HarmonyPrefix]
+    private static bool Prefix(Rect rect, DrugPolicyEntry entry)
     {
         if (!yayoCombat.ammo)
         {
