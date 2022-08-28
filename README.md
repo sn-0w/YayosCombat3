@@ -8,6 +8,7 @@ Based on the abandoned 1.3 update by Ogliss
 https://steamcommunity.com/sharedfiles/filedetails/?id=2513695736
 
 - Fixed the missing config-text
+- Added in the various fixes XT-0xFF and PrincessOfEvil in the https://github.com/Ogliss/Yayos-Combat-3/tree/Dev-1.3]dev-branch of the original git-repository
 
 ![Image](https://i.imgur.com/pufA0kM.png)
 

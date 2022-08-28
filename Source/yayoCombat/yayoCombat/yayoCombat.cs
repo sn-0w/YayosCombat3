@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using HugsLib;
@@ -14,7 +15,11 @@ public class yayoCombat : ModBase
 {
     public static readonly bool using_dualWeld;
 
+    public static readonly bool using_showHands;
+
     public static readonly bool using_AlienRaces;
+
+    public static Dictionary<Thing, Tuple<Vector3, float>> weaponLocations;
 
     public static bool refillMechAmmo;
 
@@ -126,6 +131,7 @@ public class yayoCombat : ModBase
     {
         using_dualWeld = false;
         using_AlienRaces = false;
+        using_showHands = false;
         refillMechAmmo = true;
         ammo = false;
         ammoGen = 1f;
@@ -164,6 +170,12 @@ public class yayoCombat : ModBase
                 mod.PackageId.ToLower().Contains("erdelf.HumanoidAlienRaces".ToLower())))
         {
             using_AlienRaces = true;
+        }
+
+        if (ModsConfig.ActiveModsInLoadOrder.Any(mod =>
+                mod.PackageId.ToLower().Contains("Mlie.ShowMeYourHands".ToLower())))
+        {
+            using_showHands = true;
         }
     }
 

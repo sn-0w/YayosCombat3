@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.Reflection;
+using HarmonyLib;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -66,12 +69,37 @@ public static class PawnRenderer_override
         }
 
         num %= 360f;
+        var position = GetDrawOffset(drawLoc, eq, pawn);
         Graphics.DrawMesh(
             material: !(eq.Graphic is Graphic_StackCount graphic_StackCount)
                 ? eq.Graphic.MatSingle
                 : graphic_StackCount.SubGraphicForStackCount(1, eq.def).MatSingle,
-            mesh: GetMesh(mesh, eq, aimAngle, pawn), position: GetDrawOffset(drawLoc, eq, pawn),
+            mesh: GetMesh(mesh, eq, aimAngle, pawn), position: position,
             rotation: Quaternion.AngleAxis(num, Vector3.up), layer: 0);
+
+        SaveWeaponLocation(eq, position, aimAngle);
+    }
+
+
+    private static void SaveWeaponLocation(Thing weapon, Vector3 drawLoc, float aimAngle)
+    {
+        if (!yayoCombat.using_showHands)
+        {
+            return;
+        }
+
+        if (yayoCombat.weaponLocations == null)
+        {
+            var weaponLocationsField = AccessTools.TypeByName("ShowMeYourHandsMain").GetField("weaponLocations");
+            yayoCombat.weaponLocations = (Dictionary<Thing, Tuple<Vector3, float>>)weaponLocationsField?.GetValue(null);
+        }
+
+        if (yayoCombat.weaponLocations == null)
+        {
+            return;
+        }
+
+        yayoCombat.weaponLocations[weapon] = new Tuple<Vector3, float>(drawLoc, aimAngle);
     }
 
     public static void animateEquip(PawnRenderer __instance, Pawn pawn, Vector3 rootLoc, float num,
