@@ -20,68 +20,51 @@ public static class PawnRenderer_override
         }
 
         var num = aimAngle - 90f;
-        var notRanged = false;
-        var flipped = false;
-
-        if (!(pawn.CurJob != null && pawn.CurJob.def.neverShowWeapon) && CurrentlyAiming(stance_Busy))
-        {
-            if (pawn.Rotation == Rot4.West)
-            {
-                flipped = true;
-            }
-
-            if (stance_Busy != null && (!eq.def.IsRangedWeapon || stance_Busy.verb.IsMeleeAttack))
-            {
-                notRanged = true;
-            }
-        }
 
         Mesh mesh;
-        if (notRanged)
+        switch (aimAngle)
         {
-            if (flipped)
-            {
-                mesh = MeshPool.plane10Flip;
-                num -= 270f;
-                num -= eq.def.equippedAngleOffset;
-            }
-            else
-            {
+            case > 20f and < 160f:
                 mesh = MeshPool.plane10;
                 num += eq.def.equippedAngleOffset;
-            }
-        }
-        else if (aimAngle is > 20f and < 160f)
-        {
-            mesh = MeshPool.plane10;
-            num += eq.def.equippedAngleOffset;
-        }
-        else if (aimAngle is > 200f and < 340f || flipped)
-        {
-            mesh = MeshPool.plane10Flip;
-            num -= 180f;
-            num -= eq.def.equippedAngleOffset;
-        }
-        else
-        {
-            mesh = MeshPool.plane10;
-            num += eq.def.equippedAngleOffset;
+                break;
+            case > 200f and < 340f:
+                mesh = MeshPool.plane10Flip;
+                num -= 180f;
+                num -= eq.def.equippedAngleOffset;
+                break;
+            default:
+                mesh = MeshPool.plane10;
+                num += eq.def.equippedAngleOffset;
+                break;
         }
 
         num %= 360f;
+
+        if (yayoCombat.using_Oversized)
+        {
+            SaveWeaponLocation(eq, GetDrawOffset(drawLoc, eq, pawn), aimAngle);
+            drawLoc += yayoCombat.GetOversizedOffset(pawn, eq as ThingWithComps);
+        }
+
         var position = GetDrawOffset(drawLoc, eq, pawn);
+
         Graphics.DrawMesh(
             material: !(eq.Graphic is Graphic_StackCount graphic_StackCount)
                 ? eq.Graphic.MatSingle
                 : graphic_StackCount.SubGraphicForStackCount(1, eq.def).MatSingle,
             mesh: GetMesh(mesh, eq, aimAngle, pawn), position: position,
             rotation: Quaternion.AngleAxis(num, Vector3.up), layer: 0);
+        if (yayoCombat.using_Oversized)
+        {
+            return;
+        }
 
         SaveWeaponLocation(eq, position, aimAngle);
     }
 
 
-    private static void SaveWeaponLocation(Thing weapon, Vector3 drawLoc, float aimAngle)
+    public static void SaveWeaponLocation(Thing weapon, Vector3 drawLoc, float aimAngle)
     {
         if (!yayoCombat.using_showHands)
         {

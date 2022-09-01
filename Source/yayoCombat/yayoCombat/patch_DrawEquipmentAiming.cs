@@ -22,14 +22,14 @@ public static class patch_DrawEquipmentAiming
         if (!(___pawn.CurJob != null && ___pawn.CurJob.def.neverShowWeapon) && ___pawn.stances.curStance is Stance_Busy
             {
                 neverAimWeapon: false, focusTarg.IsValid: true
-            } stance_Busy)
+            } stanceBusy)
         {
             if (___pawn.Rotation == Rot4.West)
             {
                 mirrored = true;
             }
 
-            if (!___pawn.equipment.Primary.def.IsRangedWeapon || stance_Busy.verb.IsMeleeAttack)
+            if (!___pawn.equipment.Primary.def.IsRangedWeapon || stanceBusy.verb.IsMeleeAttack)
             {
                 notRanged = true;
             }
@@ -67,9 +67,8 @@ public static class patch_DrawEquipmentAiming
             num += eq.def.equippedAngleOffset;
         }
 
-        if ((___pawn.Rotation == Rot4.West || ___pawn.Rotation == Rot4.East) && yayoCombat.using_dualWeld &&
-            !notRanged &&
-            ___pawn.equipment.TryGetOffHandEquipment(out var result) && eq == result)
+        if (yayoCombat.using_dualWeld && (___pawn.Rotation == Rot4.West || ___pawn.Rotation == Rot4.East) &&
+            !notRanged && ___pawn.equipment.TryGetOffHandEquipment(out var result) && eq == result)
         {
             Stance_Busy stance_Busy2 = null;
             if (___pawn.GetStancesOffHand() != null)
@@ -84,12 +83,15 @@ public static class patch_DrawEquipmentAiming
         }
 
         num %= 360f;
+        var position = PawnRenderer_override.GetDrawOffset(drawLoc, eq, ___pawn);
+        PawnRenderer_override.SaveWeaponLocation(eq, position, aimAngle);
+
         Graphics.DrawMesh(
             material: !(eq.Graphic is Graphic_StackCount graphic_StackCount)
                 ? eq.Graphic.MatSingle
                 : graphic_StackCount.SubGraphicForStackCount(1, eq.def).MatSingle,
             mesh: PawnRenderer_override.GetMesh(mesh, eq, aimAngle, ___pawn),
-            position: PawnRenderer_override.GetDrawOffset(drawLoc, eq, ___pawn),
+            position: position,
             rotation: Quaternion.AngleAxis(num, Vector3.up), layer: 0);
         return false;
     }

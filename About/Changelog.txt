@@ -1,5 +1,8 @@
 # Changelog for YayosCombat3
 
+1.3.4 - Somewhat better support for oversized weapons with custom offsets, still a bit off when attacking to the left with melee weapons
+
+
 1.3.3 - Added support for [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2475965842]Show Me Your Hands[/url]
 
 

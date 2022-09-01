@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using HarmonyLib;
 using HugsLib;
 using HugsLib.Settings;
 using RimWorld;
@@ -18,6 +19,13 @@ public class yayoCombat : ModBase
     public static readonly bool using_showHands;
 
     public static readonly bool using_AlienRaces;
+
+    public static readonly bool using_Oversized;
+
+    public static readonly Dictionary<ThingDef, Vector3> southOffsets = new Dictionary<ThingDef, Vector3>();
+    public static readonly Dictionary<ThingDef, Vector3> northOffsets = new Dictionary<ThingDef, Vector3>();
+    public static readonly Dictionary<ThingDef, Vector3> eastOffsets = new Dictionary<ThingDef, Vector3>();
+    public static readonly Dictionary<ThingDef, Vector3> westOffsets = new Dictionary<ThingDef, Vector3>();
 
     public static Dictionary<Thing, Tuple<Vector3, float>> weaponLocations;
 
@@ -177,9 +185,91 @@ public class yayoCombat : ModBase
         {
             using_showHands = true;
         }
+
+        using_Oversized = AccessTools.TypeByName("CompOversizedWeapon") != null;
+        if (!using_Oversized)
+        {
+            return;
+        }
+
+        var allWeapons = DefDatabase<ThingDef>.AllDefsListForReading.Where(def => def.IsWeapon).ToList();
+        foreach (var weapon in allWeapons)
+        {
+            saveWeaponOffsets(weapon);
+        }
     }
 
     public override string ModIdentifier => "YayoCombat3";
+
+    public static Vector3 GetOversizedOffset(Pawn pawn, ThingWithComps weapon)
+    {
+        if (!using_Oversized)
+        {
+            return Vector3.zero;
+        }
+
+        switch (pawn.Rotation.AsInt)
+        {
+            case 0:
+                return northOffsets.TryGetValue(weapon.def, out var northValue)
+                    ? northValue
+                    : Vector3.zero;
+            case 1:
+                return eastOffsets.TryGetValue(weapon.def, out var eastValue)
+                    ? eastValue
+                    : Vector3.zero;
+            case 2:
+                return southOffsets.TryGetValue(weapon.def, out var southValue)
+                    ? southValue
+                    : Vector3.zero;
+            case 3:
+                return westOffsets.TryGetValue(weapon.def, out var westValue)
+                    ? westValue
+                    : Vector3.zero;
+            default:
+                return Vector3.zero;
+        }
+    }
+
+    private static void saveWeaponOffsets(ThingDef weapon)
+    {
+        var thingComp =
+            weapon.comps.FirstOrDefault(y => y.GetType().ToString().Contains("CompOversizedWeapon"));
+        if (thingComp == null)
+        {
+            return;
+        }
+
+        var oversizedType = thingComp.GetType();
+        var fields = oversizedType.GetFields().Where(info => info.Name.Contains("Offset"));
+
+        foreach (var fieldInfo in fields)
+        {
+            switch (fieldInfo.Name)
+            {
+                case "northOffset":
+                    northOffsets[weapon] = fieldInfo.GetValue(thingComp) is Vector3
+                        ? (Vector3)fieldInfo.GetValue(thingComp)
+                        : Vector3.zero;
+                    break;
+                case "southOffset":
+                    southOffsets[weapon] = fieldInfo.GetValue(thingComp) is Vector3
+                        ? (Vector3)fieldInfo.GetValue(thingComp)
+                        : Vector3.zero;
+                    break;
+                case "westOffset":
+                    westOffsets[weapon] = fieldInfo.GetValue(thingComp) is Vector3
+                        ? (Vector3)fieldInfo.GetValue(thingComp)
+                        : Vector3.zero;
+                    break;
+                case "eastOffset":
+                    eastOffsets[weapon] = fieldInfo.GetValue(thingComp) is Vector3
+                        ? (Vector3)fieldInfo.GetValue(thingComp)
+                        : Vector3.zero;
+                    break;
+            }
+        }
+    }
 
     public override void DefsLoaded()
     {
