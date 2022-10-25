@@ -43,15 +43,25 @@ internal class patch_ThingSetMaker_TraderStock_Generate
 
     private static void AddAmmo(TraderKindDef traderKindDef, Faction makingFaction, int forTile, List<Thing> outThings)
     {
-        var tradeTagFieldInfo =
-            typeof(StockGenerator_Tag).GetField("TradeTag", BindingFlags.NonPublic | BindingFlags.Instance);
-        var isWeaponsTrader = traderKindDef.stockGenerators.FirstOrDefault(s => s is StockGenerator_WeaponsRanged) !=
-                              null;
-        var isExoticTrader = !isWeaponsTrader &&
-                             traderKindDef.stockGenerators.FirstOrDefault(s => s is StockGenerator_Tag tag &&
-                                                                               (string)tradeTagFieldInfo
-                                                                                   ?.GetValue(tag) == "ExoticMisc") !=
-                             null;
+        if (!yayoCombat.ammo)
+            return;
+
+        var isWeaponsTrader = false;
+        var isExoticTrader = false;
+        foreach (var stockGenerator in traderKindDef.stockGenerators)
+        {
+            if (stockGenerator is StockGenerator_MarketValue marketValue)
+            {
+                if (marketValue.tradeTag == "WeaponRanged")
+                    isWeaponsTrader = true;
+            }
+            else if (stockGenerator is StockGenerator_Tag tag)
+            {
+                if (tag.tradeTag == "ExoticMisc")
+                    isExoticTrader = true;
+            }
+		}
+
         if (!traderKindDef.defName.ToLower().Contains("bulkgoods")
             && !isWeaponsTrader
             && !isExoticTrader
@@ -59,6 +69,9 @@ internal class patch_ThingSetMaker_TraderStock_Generate
         {
             return;
         }
+
+        if (isWeaponsTrader)
+            isExoticTrader = false;
 
         var tech = TechLevel.Spacer;
         if (makingFaction?.def != null)
