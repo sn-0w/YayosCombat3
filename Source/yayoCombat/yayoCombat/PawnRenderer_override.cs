@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using HarmonyLib;
 using RimWorld;
 using UnityEngine;
@@ -50,7 +49,7 @@ public static class PawnRenderer_override
         var position = GetDrawOffset(drawLoc, eq, pawn);
 
         Graphics.DrawMesh(
-            material: !(eq.Graphic is Graphic_StackCount graphic_StackCount)
+            material: eq.Graphic is not Graphic_StackCount graphic_StackCount
                 ? eq.Graphic.MatSingle
                 : graphic_StackCount.SubGraphicForStackCount(1, eq.def).MatSingle,
             mesh: GetMesh(mesh, eq, aimAngle, pawn), position: position,
@@ -94,14 +93,7 @@ public static class PawnRenderer_override
         {
             if (thing.def.IsRangedWeapon && !stance_Busy.verb.IsMeleeAttack)
             {
-                var fieldInfo = typeof(Verb).GetField("ticksToNextBurstShot",
-                    BindingFlags.NonPublic | BindingFlags.Instance);
-                if (fieldInfo == null)
-                {
-                    return;
-                }
-
-                var num2 = (int)fieldInfo.GetValue(stance_Busy.verb); //stance_Busy.verb.ticksToNextBurstShot;
+                var num2 = stance_Busy.verb.ticksToNextBurstShot;
                 var num3 = (pawn.LastAttackTargetTick + thing.thingIDNumber) % 10000 % 1000 % 100 % 5;
                 var stance_Warmup = pawn.stances.curStance as Stance_Warmup;
                 if (num2 > 10)

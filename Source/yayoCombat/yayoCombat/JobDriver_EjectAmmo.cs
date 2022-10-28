@@ -15,7 +15,7 @@ public class JobDriver_EjectAmmo : JobDriver
         return true;
     }
 
-    protected override IEnumerable<Toil> MakeNewToils()
+    public override IEnumerable<Toil> MakeNewToils()
     {
         var f = this;
         Thing gear = f.Gear;

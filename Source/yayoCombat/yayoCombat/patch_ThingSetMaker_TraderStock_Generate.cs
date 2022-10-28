@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
@@ -43,9 +42,17 @@ internal class patch_ThingSetMaker_TraderStock_Generate
 
     private static void AddAmmo(TraderKindDef traderKindDef, Faction makingFaction, int forTile, List<Thing> outThings)
     {
+        if (!yayoCombat.ammo)
+        {
+            return;
+        }
+
         var tradeTagFieldInfo =
             typeof(StockGenerator_Tag).GetField("TradeTag", BindingFlags.NonPublic | BindingFlags.Instance);
-        var isWeaponsTrader = traderKindDef.stockGenerators.FirstOrDefault(s => s is StockGenerator_WeaponsRanged) !=
+        var isWeaponsTrader = traderKindDef.stockGenerators.FirstOrDefault(s => s is StockGenerator_MarketValue
+                              {
+                                  tradeTag: "WeaponRanged"
+                              }) !=
                               null;
         var isExoticTrader = !isWeaponsTrader &&
                              traderKindDef.stockGenerators.FirstOrDefault(s => s is StockGenerator_Tag tag &&

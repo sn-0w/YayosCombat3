@@ -87,7 +87,7 @@ public static class patch_DrawEquipmentAiming
         PawnRenderer_override.SaveWeaponLocation(eq, position, aimAngle);
 
         Graphics.DrawMesh(
-            material: !(eq.Graphic is Graphic_StackCount graphic_StackCount)
+            material: eq.Graphic is not Graphic_StackCount graphic_StackCount
                 ? eq.Graphic.MatSingle
                 : graphic_StackCount.SubGraphicForStackCount(1, eq.def).MatSingle,
             mesh: PawnRenderer_override.GetMesh(mesh, eq, aimAngle, ___pawn),
