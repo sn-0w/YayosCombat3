@@ -149,13 +149,13 @@ public class patch_Verb_LaunchProjectile_TryCastShot
         if (Rand.Chance(missRadius))
         {
             resultingLine.ChangeDestToMissWild(shotReport.AimOnTargetChance_StandardTarget);
-            var projectileHitFlags2 = ProjectileHitFlags.NonTargetWorld;
+            var targetPawns = ProjectileHitFlags.NonTargetWorld;
             if (Rand.Chance(yayoCombat.s_missBulletHit) && ___canHitNonTargetPawnsNow)
             {
-                projectileHitFlags2 |= ProjectileHitFlags.NonTargetPawns;
+                targetPawns |= ProjectileHitFlags.NonTargetPawns;
             }
 
-            projectile2.Launch(launcher, drawPos, resultingLine.Dest, localTargetInfo, projectileHitFlags2,
+            projectile2.Launch(launcher, drawPos, resultingLine.Dest, localTargetInfo, targetPawns,
                 ___preventFriendlyFire, equipment, targetCoverDef);
             __result = true;
             return false;
@@ -164,31 +164,31 @@ public class patch_Verb_LaunchProjectile_TryCastShot
         if (localTargetInfo.Thing != null && localTargetInfo.Thing.def.category == ThingCategory.Pawn &&
             !Rand.Chance(shotReport.PassCoverChance))
         {
-            var projectileHitFlags3 = ProjectileHitFlags.NonTargetWorld;
+            var targetPawns = ProjectileHitFlags.NonTargetWorld;
             if (___canHitNonTargetPawnsNow)
             {
-                projectileHitFlags3 |= ProjectileHitFlags.NonTargetPawns;
+                targetPawns |= ProjectileHitFlags.NonTargetPawns;
             }
 
-            projectile2.Launch(launcher, drawPos, randomCoverToMissInto, localTargetInfo, projectileHitFlags3,
+            projectile2.Launch(launcher, drawPos, randomCoverToMissInto, localTargetInfo, targetPawns,
                 ___preventFriendlyFire, equipment, targetCoverDef);
             __result = true;
             return false;
         }
 
-        var projectileHitFlags4 = ProjectileHitFlags.IntendedTarget;
+        var intendedTarget = ProjectileHitFlags.IntendedTarget;
         if (___canHitNonTargetPawnsNow)
         {
-            projectileHitFlags4 |= ProjectileHitFlags.NonTargetPawns;
+            intendedTarget |= ProjectileHitFlags.NonTargetPawns;
         }
 
         if (!localTargetInfo.HasThing || localTargetInfo.Thing.def.Fillage == FillCategory.Full)
         {
-            projectileHitFlags4 |= ProjectileHitFlags.NonTargetWorld;
+            intendedTarget |= ProjectileHitFlags.NonTargetWorld;
         }
 
         projectile2.Launch(launcher, drawPos, localTargetInfo.Thing != null ? localTargetInfo : resultingLine.Dest,
-            localTargetInfo, projectileHitFlags4,
+            localTargetInfo, intendedTarget,
             ___preventFriendlyFire, equipment, targetCoverDef);
 
         __result = true;

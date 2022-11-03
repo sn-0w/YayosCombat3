@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
@@ -44,7 +43,9 @@ internal class patch_ThingSetMaker_TraderStock_Generate
     private static void AddAmmo(TraderKindDef traderKindDef, Faction makingFaction, int forTile, List<Thing> outThings)
     {
         if (!yayoCombat.ammo)
+        {
             return;
+        }
 
         var isWeaponsTrader = false;
         var isExoticTrader = false;

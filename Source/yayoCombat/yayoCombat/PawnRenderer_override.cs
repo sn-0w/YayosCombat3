@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using HarmonyLib;
 using RimWorld;
 using UnityEngine;
@@ -50,7 +49,7 @@ public static class PawnRenderer_override
         var position = GetDrawOffset(drawLoc, eq, pawn);
 
         Graphics.DrawMesh(
-            material: !(eq.Graphic is Graphic_StackCount graphic_StackCount)
+            material: eq.Graphic is not Graphic_StackCount graphic_StackCount
                 ? eq.Graphic.MatSingle
                 : graphic_StackCount.SubGraphicForStackCount(1, eq.def).MatSingle,
             mesh: GetMesh(mesh, eq, aimAngle, pawn), position: position,
