@@ -92,7 +92,7 @@ public static class PawnRenderer_override
         if (stance_Busy is { neverAimWeapon: false, focusTarg.IsValid: true })
         {
             if (thing.def.IsRangedWeapon && !stance_Busy.verb.IsMeleeAttack)
-            {
+            {                
                 var num2 = stance_Busy.verb.ticksToNextBurstShot;
                 var num3 = (pawn.LastAttackTargetTick + thing.thingIDNumber) % 10000 % 1000 % 100 % 5;
                 var stance_Warmup = pawn.stances.curStance as Stance_Warmup;
