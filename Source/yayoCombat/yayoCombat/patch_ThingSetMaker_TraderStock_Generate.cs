@@ -51,17 +51,28 @@ internal class patch_ThingSetMaker_TraderStock_Generate
         var isExoticTrader = false;
         foreach (var stockGenerator in traderKindDef.stockGenerators)
         {
-            if (stockGenerator is StockGenerator_MarketValue marketValue)
+            switch (stockGenerator)
             {
-                if (marketValue.tradeTag == "WeaponRanged")
-                    isWeaponsTrader = true;
+                case StockGenerator_MarketValue marketValue:
+                {
+                    if (marketValue.tradeTag == "WeaponRanged")
+                    {
+                        isWeaponsTrader = true;
+                    }
+
+                    break;
+                }
+                case StockGenerator_Tag tag:
+                {
+                    if (tag.tradeTag == "ExoticMisc")
+                    {
+                        isExoticTrader = true;
+                    }
+
+                    break;
+                }
             }
-            else if (stockGenerator is StockGenerator_Tag tag)
-            {
-                if (tag.tradeTag == "ExoticMisc")
-                    isExoticTrader = true;
-            }
-		}
+        }
 
         if (!traderKindDef.defName.ToLower().Contains("bulkgoods")
             && !isWeaponsTrader
@@ -72,7 +83,9 @@ internal class patch_ThingSetMaker_TraderStock_Generate
         }
 
         if (isWeaponsTrader)
+        {
             isExoticTrader = false;
+        }
 
         var tech = TechLevel.Spacer;
         if (makingFaction?.def != null)

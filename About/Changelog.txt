@@ -1,5 +1,8 @@
 # Changelog for YayosCombat3
 
+1.4.2 - Fix for attack issues and trader-generation, thanks XT-0xFF!
+
+
 1.4.1 - Mod updated for 1.4 and passed autotests.
 Used DeepL to update translations for ChineseSimplified, French, German, Russian
 
