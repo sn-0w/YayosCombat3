@@ -29,7 +29,7 @@ internal class Patch_DrugPolicy
         Scribe_Values.Look(ref __instance.label, "label");
         Scribe_Collections.Look(ref s_entriesInt(__instance), "drugs", LookMode.Deep);
         if (Scribe.mode == LoadSaveMode.PostLoadInit && s_entriesInt(__instance) != null &&
-            s_entriesInt(__instance).RemoveAll(x => x == null || x.drug == null) != 0)
+            s_entriesInt(__instance).RemoveAll(x => x?.drug == null) != 0)
         {
             Log.Error("Some DrugPolicyEntries were null after loading.");
         }

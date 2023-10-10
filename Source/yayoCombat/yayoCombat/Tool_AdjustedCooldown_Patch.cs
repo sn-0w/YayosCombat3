@@ -11,9 +11,27 @@ internal class Tool_AdjustedCooldown_Patch
     [HarmonyPriority(0)]
     private static void Postfix(ref float __result, Thing ownerEquipment)
     {
-        if (!yayoCombat.advAni || ownerEquipment == null || !(__result > 0f) ||
-            ownerEquipment.ParentHolder is not { ParentHolder: Pawn } ||
-            ownerEquipment.def is not { IsMeleeWeapon: true })
+        if (!yayoCombat.advAni)
+        {
+            return;
+        }
+
+        if (ownerEquipment == null)
+        {
+            return;
+        }
+
+        if (!(__result > 0f))
+        {
+            return;
+        }
+
+        if (ownerEquipment.ParentHolder is not { ParentHolder: Pawn })
+        {
+            return;
+        }
+
+        if (ownerEquipment.def is not { IsMeleeWeapon: true })
         {
             return;
         }

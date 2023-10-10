@@ -10,7 +10,17 @@ public static class Thing_TakeDamage_Patch
     [HarmonyPrefix]
     private static void Prefix(ref DamageInfo dinfo)
     {
-        if (!yayoCombat.advAni || !(dinfo.Amount > 0f) || dinfo.Weapon is not { IsMeleeWeapon: true })
+        if (!yayoCombat.advAni)
+        {
+            return;
+        }
+
+        if (!(dinfo.Amount > 0f))
+        {
+            return;
+        }
+
+        if (dinfo.Weapon is not { IsMeleeWeapon: true })
         {
             return;
         }

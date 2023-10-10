@@ -68,14 +68,16 @@ internal class patch_Dialog_ManageDrugPolicies_DoEntryRow
                 ? "NoDrugUseRequirement".Translate()
                 : entry.onlyIfMoodBelow.ToStringPercent();
             entry.onlyIfMoodBelow =
-                Widgets.HorizontalSlider(new Rect(num8, rect.y, moodThresholdWidth, rect.height).ContractedBy(4f),
+                Widgets.HorizontalSlider_NewTemp(
+                    new Rect(num8, rect.y, moodThresholdWidth, rect.height).ContractedBy(4f),
                     entry.onlyIfMoodBelow, 0.01f, 1f, true, label);
             var num9 = num8 + moodThresholdWidth;
             string label2 = entry.onlyIfJoyBelow >= 1.0
                 ? "NoDrugUseRequirement".Translate()
                 : entry.onlyIfJoyBelow.ToStringPercent();
             entry.onlyIfJoyBelow =
-                Widgets.HorizontalSlider(new Rect(num9, rect.y, joyThresholdWidth, rect.height).ContractedBy(4f),
+                Widgets.HorizontalSlider_NewTemp(
+                    new Rect(num9, rect.y, joyThresholdWidth, rect.height).ContractedBy(4f),
                     entry.onlyIfJoyBelow, 0.01f, 1f, true, label2);
         }
 

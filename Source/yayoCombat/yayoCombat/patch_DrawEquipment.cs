@@ -17,13 +17,18 @@ internal class patch_DrawEquipment
             return true;
         }
 
+        if (yayoCombat.using_meleeAnimations && ___pawn.equipment?.Primary?.def?.IsMeleeWeapon == true)
+        {
+            return true;
+        }
+
         var rootLoc2 = rootLoc;
         if (___pawn.Dead || !___pawn.Spawned)
         {
             return false;
         }
 
-        if (___pawn.equipment == null || ___pawn.equipment.Primary == null)
+        if (___pawn.equipment?.Primary == null)
         {
             return false;
         }

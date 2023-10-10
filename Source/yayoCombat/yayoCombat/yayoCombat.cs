@@ -16,6 +16,8 @@ public class yayoCombat : ModBase
 {
     public static readonly bool using_dualWeld;
 
+    public static readonly bool using_meleeAnimations;
+
     public static readonly bool using_showHands;
 
     public static readonly bool using_AlienRaces;
@@ -138,6 +140,7 @@ public class yayoCombat : ModBase
     static yayoCombat()
     {
         using_dualWeld = false;
+        using_meleeAnimations = false;
         using_AlienRaces = false;
         using_showHands = false;
         refillMechAmmo = true;
@@ -172,6 +175,12 @@ public class yayoCombat : ModBase
         if (ModsConfig.ActiveModsInLoadOrder.Any(mod => mod.PackageId.ToLower().Contains("DualWield".ToLower())))
         {
             using_dualWeld = true;
+        }
+
+        if (ModsConfig.ActiveModsInLoadOrder.Any(mod =>
+                mod.PackageId.ToLower().Contains("co.uk.epicguru.meleeanimation".ToLower())))
+        {
+            using_meleeAnimations = true;
         }
 
         if (ModsConfig.ActiveModsInLoadOrder.Any(mod =>
@@ -493,7 +502,7 @@ public class yayoCombat : ModBase
                 compProperties_Reloadable.hotKey = KeyBindingDefOf.Misc4;
                 compProperties_Reloadable.chargeNoun = "ammo";
                 compProperties_Reloadable.displayGizmoWhileUndrafted = true;
-                if (verbProperties.defaultProjectile is { projectile.damageDef: { } })
+                if (verbProperties.defaultProjectile is { projectile.damageDef: not null })
                 {
                     if (item3.weaponTags != null)
                     {

@@ -129,7 +129,7 @@ public static class ArmorUtility
         var randomZeroOne = Rand.Value;
         if (isArmor)
         {
-            var f = damAmount * (0.2f + (armorDmg * 0.5f));
+            var f = damAmount * (0.2f + (armorDmg * DeflectThresholdFactor));
             armorThing.TakeDamage(new DamageInfo(damageDef, GenMath.RoundRandom(f)));
         }
 
@@ -156,16 +156,16 @@ public static class ArmorUtility
             else
             {
                 forcedDefl = true;
-                damAmount = GenMath.RoundRandom(damAmount * (0.25f + (armorDmg * 0.5f)));
+                damAmount = GenMath.RoundRandom(damAmount * (0.25f + (armorDmg * DeflectThresholdFactor)));
                 if (damageDef.armorCategory == DamageArmorCategoryDefOf.Sharp)
                 {
                     damageDef = DamageDefOf.Blunt;
                 }
             }
         }
-        else if (randomZeroOne < leftArmor * (0.5f + (armorHpPer * 0.5f)))
+        else if (randomZeroOne < leftArmor * (0.5f + (armorHpPer * DeflectThresholdFactor)))
         {
-            damAmount = GenMath.RoundRandom(damAmount * 0.5f);
+            damAmount = GenMath.RoundRandom(damAmount * DeflectThresholdFactor);
             if (damageDef.armorCategory == DamageArmorCategoryDefOf.Sharp)
             {
                 damageDef = DamageDefOf.Blunt;

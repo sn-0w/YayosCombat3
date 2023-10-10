@@ -15,6 +15,11 @@ public static class patch_DrawEquipmentAiming
             return true;
         }
 
+        if (yayoCombat.using_meleeAnimations && eq.def.IsMeleeWeapon)
+        {
+            return true;
+        }
+
         var num = aimAngle - 90f;
         var notRanged = false;
         var mirrored = false;

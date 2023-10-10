@@ -18,6 +18,12 @@ public static class PawnRenderer_override
             return;
         }
 
+        if (yayoCombat.using_meleeAnimations && eq.def.IsMeleeWeapon)
+        {
+            instance.DrawEquipmentAiming(eq, drawLoc, aimAngle);
+            return;
+        }
+
         var num = aimAngle - 90f;
 
         Mesh mesh;
@@ -307,7 +313,7 @@ public static class PawnRenderer_override
         }
         else
         {
-            if (pawn.carryTracker is { CarriedThing: { } } || !pawn.Drafted &&
+            if (pawn.carryTracker is { CarriedThing: not null } || !pawn.Drafted &&
                 (pawn.CurJob == null || !pawn.CurJob.def.alwaysShowWeapon) &&
                 (pawn.mindState.duty == null || !pawn.mindState.duty.def.alwaysShowWeapon))
             {
