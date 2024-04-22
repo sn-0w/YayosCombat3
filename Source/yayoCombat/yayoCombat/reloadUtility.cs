@@ -26,7 +26,7 @@ internal class reloadUtility
         pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
     }
 
-    internal static void EjectAmmoAction(Pawn p, CompReloadable cp)
+    internal static void EjectAmmoAction(Pawn p, CompApparelReloadable cp)
     {
         var num = 0;
         while (cp.RemainingCharges > 0)
@@ -48,23 +48,23 @@ internal class reloadUtility
 
     internal static void TryThingEjectAmmoDirect(Thing w, bool forbidden = false, Pawn pawn = null)
     {
-        if (!w.def.IsWeapon || w.TryGetComp<CompReloadable>() == null)
+        if (!w.def.IsWeapon || w.TryGetComp<CompApparelReloadable>() == null)
         {
             return;
         }
 
-        var compReloadable = w.TryGetComp<CompReloadable>();
+        var CompApparelReloadable = w.TryGetComp<CompApparelReloadable>();
         var num = 0;
-        while (compReloadable.RemainingCharges > 0)
+        while (CompApparelReloadable.RemainingCharges > 0)
         {
-            compReloadable.UsedOnce();
+            CompApparelReloadable.UsedOnce();
             num++;
         }
 
         while (num > 0)
         {
-            var thing = ThingMaker.MakeThing(compReloadable.AmmoDef);
-            thing.stackCount = Mathf.Min(thing.def.stackLimit, num) * compReloadable.Props.ammoCountPerCharge;
+            var thing = ThingMaker.MakeThing(CompApparelReloadable.AmmoDef);
+            thing.stackCount = Mathf.Min(thing.def.stackLimit, num) * CompApparelReloadable.Props.ammoCountPerCharge;
             if (forbidden)
             {
                 thing.SetForbidden(true);
@@ -86,8 +86,8 @@ internal class reloadUtility
     {
         foreach (var thing in c.GetThingList(m))
         {
-            var compReloadable = thing.TryGetComp<CompReloadable>();
-            if (compReloadable is { RemainingCharges: > 0 })
+            var CompApparelReloadable = thing.TryGetComp<CompApparelReloadable>();
+            if (CompApparelReloadable is { RemainingCharges: > 0 })
             {
                 return thing;
             }
@@ -96,7 +96,7 @@ internal class reloadUtility
         return null;
     }
 
-    public static void tryAutoReload(CompReloadable cp)
+    public static void tryAutoReload(CompApparelReloadable cp)
     {
         if (cp.RemainingCharges > 0)
         {

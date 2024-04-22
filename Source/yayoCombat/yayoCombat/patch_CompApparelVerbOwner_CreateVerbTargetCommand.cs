@@ -4,12 +4,17 @@ using Verse;
 
 namespace yayoCombat;
 
-[HarmonyPatch(typeof(CompReloadable), "CreateVerbTargetCommand")]
-internal class patch_CompReloadable_CreateVerbTargetCommand
+[HarmonyPatch(typeof(CompApparelVerbOwner), nameof(CompApparelVerbOwner.CreateVerbTargetCommand))]
+internal class patch_CompApparelVerbOwner_CreateVerbTargetCommand
 {
     [HarmonyPrefix]
-    private static bool Prefix(ref Command_Reloadable __result, CompReloadable __instance, Thing gear, Verb verb)
+    private static bool Prefix(ref Command_VerbTarget __result, CompApparelVerbOwner __instance, Thing gear, Verb verb)
     {
+        if (__instance is not CompApparelReloadable value)
+        {
+            return true;
+        }
+
         if (!yayoCombat.ammo || !gear.def.IsWeapon)
         {
             return true;
@@ -17,7 +22,7 @@ internal class patch_CompReloadable_CreateVerbTargetCommand
 
         verb.caster = __instance.Wearer;
 
-        var commandReloadable = new Command_Reloadable(__instance)
+        var commandReloadable = new Command_VerbTarget
         {
             defaultDesc = gear.def.description,
             defaultLabel = verb.verbProps.label,
@@ -30,7 +35,7 @@ internal class patch_CompReloadable_CreateVerbTargetCommand
             commandReloadable.iconOffset = verb.verbProps.defaultProjectile.uiIconOffset;
             if (verb.verbProps.defaultProjectile.graphicData != null)
             {
-                commandReloadable.overrideColor = verb.verbProps.defaultProjectile.graphicData.color;
+                commandReloadable.defaultIconColor = verb.verbProps.defaultProjectile.graphicData.color;
             }
         }
         else
@@ -50,10 +55,9 @@ internal class patch_CompReloadable_CreateVerbTargetCommand
             commandReloadable.Disable("IsIncapableOfViolenceLower"
                 .Translate(__instance.Wearer.LabelShort, __instance.Wearer).CapitalizeFirst() + ".");
         }
-        else if (!__instance.CanBeUsed)
+        else if (!__instance.CanBeUsed(out _))
         {
-            commandReloadable.Disable(__instance.DisabledReason(__instance.MinAmmoNeeded(false),
-                __instance.MaxAmmoNeeded(false)));
+            commandReloadable.Disable(value.DisabledReason(value.MinAmmoNeeded(false), value.MaxAmmoNeeded(false)));
         }
 
         __result = commandReloadable;

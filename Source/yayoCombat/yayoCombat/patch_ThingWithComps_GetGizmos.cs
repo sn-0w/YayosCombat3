@@ -5,7 +5,7 @@ using Verse;
 
 namespace yayoCombat;
 
-[HarmonyPatch(typeof(Pawn_EquipmentTracker), "GetGizmos")]
+[HarmonyPatch(typeof(Pawn_EquipmentTracker), nameof(Pawn_EquipmentTracker.GetGizmos))]
 internal class patch_ThingWithComps_GetGizmos
 {
     [HarmonyPostfix]

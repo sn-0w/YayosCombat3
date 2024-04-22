@@ -5,7 +5,7 @@ using Verse;
 
 namespace yayoCombat;
 
-[HarmonyPatch(typeof(Dialog_ManageDrugPolicies), "DoEntryRow")]
+[HarmonyPatch(typeof(Dialog_ManageDrugPolicies), nameof(Dialog_ManageDrugPolicies.DoEntryRow))]
 internal class patch_Dialog_ManageDrugPolicies_DoEntryRow
 {
     [HarmonyPrefix]
@@ -68,7 +68,7 @@ internal class patch_Dialog_ManageDrugPolicies_DoEntryRow
                 ? "NoDrugUseRequirement".Translate()
                 : entry.onlyIfMoodBelow.ToStringPercent();
             entry.onlyIfMoodBelow =
-                Widgets.HorizontalSlider_NewTemp(
+                Widgets.HorizontalSlider(
                     new Rect(num8, rect.y, moodThresholdWidth, rect.height).ContractedBy(4f),
                     entry.onlyIfMoodBelow, 0.01f, 1f, true, label);
             var num9 = num8 + moodThresholdWidth;
@@ -76,7 +76,7 @@ internal class patch_Dialog_ManageDrugPolicies_DoEntryRow
                 ? "NoDrugUseRequirement".Translate()
                 : entry.onlyIfJoyBelow.ToStringPercent();
             entry.onlyIfJoyBelow =
-                Widgets.HorizontalSlider_NewTemp(
+                Widgets.HorizontalSlider(
                     new Rect(num9, rect.y, joyThresholdWidth, rect.height).ContractedBy(4f),
                     entry.onlyIfJoyBelow, 0.01f, 1f, true, label2);
         }

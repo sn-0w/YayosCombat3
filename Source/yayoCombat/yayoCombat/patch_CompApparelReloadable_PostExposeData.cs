@@ -4,11 +4,11 @@ using Verse;
 
 namespace yayoCombat;
 
-[HarmonyPatch(typeof(CompReloadable), "PostExposeData")]
-internal class patch_CompReloadable_PostExposeData
+[HarmonyPatch(typeof(CompApparelReloadable), nameof(CompApparelReloadable.PostExposeData))]
+internal class patch_CompApparelReloadable_PostExposeData
 {
     [HarmonyPrefix]
-    private static bool Prefix(CompReloadable __instance, ref int ___remainingCharges)
+    private static bool Prefix(CompApparelReloadable __instance, ref int ___remainingCharges)
     {
         if (!yayoCombat.ammo)
         {

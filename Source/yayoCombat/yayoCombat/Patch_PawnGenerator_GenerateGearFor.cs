@@ -6,8 +6,8 @@ using Verse;
 
 namespace yayoCombat;
 
-[HarmonyPatch(typeof(PawnGenerator), "GenerateGearFor")]
-internal class Patch_PawnGenerator_GenerateGearFor
+[HarmonyPatch(typeof(PawnGenerator), nameof(PawnGenerator.GenerateGearFor))]
+internal class patch_PawnGenerator_GenerateGearFor
 {
     [HarmonyPostfix]
     [HarmonyPriority(Priority.Last)]
@@ -18,13 +18,13 @@ internal class Patch_PawnGenerator_GenerateGearFor
             return;
         }
 
-        var allWeaponsComps = new List<CompReloadable>();
+        var allWeaponsComps = new List<CompApparelReloadable>();
         // get all generated equipped weapons
         if (pawn?.equipment?.AllEquipmentListForReading != null)
         {
             foreach (var thing in pawn.equipment.AllEquipmentListForReading)
             {
-                var comp = thing.GetComp<CompReloadable>();
+                var comp = thing.GetComp<CompApparelReloadable>();
                 if (comp != null && thing.def.IsWeapon)
                 {
                     allWeaponsComps.Add(comp);
@@ -37,7 +37,7 @@ internal class Patch_PawnGenerator_GenerateGearFor
         {
             foreach (var thing in pawn.inventory.innerContainer)
             {
-                var comp = thing.TryGetComp<CompReloadable>();
+                var comp = thing.TryGetComp<CompApparelReloadable>();
                 if (comp != null && thing.def.IsWeapon)
                 {
                     allWeaponsComps.Add(comp);
@@ -49,7 +49,7 @@ internal class Patch_PawnGenerator_GenerateGearFor
         foreach (var comp in allWeaponsComps)
         {
             int charges;
-            if (yayoCombat.s_enemyAmmo <= 1f || pawn?.Faction != null && pawn.Faction.IsPlayer)
+            if (yayoCombat.s_enemyAmmo <= 1f || pawn?.Faction is { IsPlayer: true })
             {
                 charges = Mathf.Min(comp.MaxCharges,
                     Mathf.RoundToInt(comp.MaxCharges * yayoCombat.s_enemyAmmo * Rand.Range(0.7f, 1.3f)));

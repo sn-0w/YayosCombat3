@@ -8,7 +8,7 @@ using Verse;
 
 namespace yayoCombat;
 
-[HarmonyPatch(typeof(ThingSetMaker_TraderStock), "Generate")]
+[HarmonyPatch(typeof(ThingSetMaker_TraderStock), nameof(ThingSetMaker_TraderStock.Generate))]
 internal class patch_ThingSetMaker_TraderStock_Generate
 {
     [HarmonyTranspiler]

@@ -20,7 +20,7 @@ public class JobDriver_EjectAmmo : JobDriver
         var f = this;
         Thing gear = f.Gear;
         GetActor();
-        var comp = gear?.TryGetComp<CompReloadable>();
+        var comp = gear?.TryGetComp<CompApparelReloadable>();
         f.FailOn(() => comp == null);
         f.FailOn(() => comp is { RemainingCharges: <= 0 });
         f.FailOnDestroyedOrNull(TargetIndex.A);
@@ -57,7 +57,7 @@ public class JobDriver_EjectAmmo : JobDriver
         };
     }
 
-    private IEnumerable<Toil> EjectAsMuchAsPossible(CompReloadable comp)
+    private IEnumerable<Toil> EjectAsMuchAsPossible(CompApparelReloadable comp)
     {
         var done = Toils_General.Label();
         yield return Toils_Jump.JumpIf(done,

@@ -3,7 +3,7 @@ using Verse;
 
 namespace yayoCombat;
 
-[HarmonyPatch(typeof(Pawn_EquipmentTracker), "DropAllEquipment")]
+[HarmonyPatch(typeof(Pawn_EquipmentTracker), nameof(Pawn_EquipmentTracker.DropAllEquipment))]
 internal class patch_Pawn_EquipmentTracker_DropAllEquipment
 {
     [HarmonyPrefix]

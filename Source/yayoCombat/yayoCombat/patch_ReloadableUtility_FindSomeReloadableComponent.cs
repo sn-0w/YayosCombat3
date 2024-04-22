@@ -1,32 +1,33 @@
 using HarmonyLib;
 using RimWorld;
+using RimWorld.Utility;
 using Verse;
 
 namespace yayoCombat;
 
-[HarmonyPatch(typeof(ReloadableUtility), "FindSomeReloadableComponent")]
+[HarmonyPatch(typeof(ReloadableUtility), nameof(ReloadableUtility.FindSomeReloadableComponent))]
 internal class patch_ReloadableUtility_FindSomeReloadableComponent
 {
     [HarmonyPostfix]
-    private static CompReloadable Postfix(CompReloadable __result, Pawn pawn, bool allowForcedReload)
+    private static void Postfix(ref IReloadableComp __result, Pawn pawn, bool allowForcedReload)
     {
         if (!yayoCombat.ammo || __result != null)
         {
-            return __result;
+            return;
         }
+
 
         foreach (var thing in pawn.equipment.AllEquipmentListForReading)
         {
-            var compReloadable = thing.TryGetComp<CompReloadable>();
-            if (compReloadable?.NeedsReload(allowForcedReload) != true)
+            var CompApparelReloadable = thing.TryGetComp<CompApparelReloadable>();
+            if (CompApparelReloadable?.NeedsReload(allowForcedReload) != true)
             {
                 continue;
             }
 
-            __result = compReloadable;
-            break;
-        }
 
-        return __result;
+            __result = CompApparelReloadable;
+            return;
+        }
     }
 }

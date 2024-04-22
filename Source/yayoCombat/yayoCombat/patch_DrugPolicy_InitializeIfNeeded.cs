@@ -5,7 +5,7 @@ using Verse;
 
 namespace yayoCombat;
 
-[HarmonyPatch(typeof(DrugPolicy), "InitializeIfNeeded")]
+[HarmonyPatch(typeof(DrugPolicy), nameof(DrugPolicy.InitializeIfNeeded))]
 internal class patch_DrugPolicy_InitializeIfNeeded
 {
     private static readonly AccessTools.FieldRef<DrugPolicy, List<DrugPolicyEntry>> s_entriesInt =
@@ -25,7 +25,7 @@ internal class patch_DrugPolicy_InitializeIfNeeded
             return false;
         }
 
-        s_entriesInt(__instance) = new List<DrugPolicyEntry>();
+        s_entriesInt(__instance) = [];
         var allDefsListForReading = DefDatabase<ThingDef>.AllDefsListForReading;
         var list = new List<DrugPolicyEntry>();
         foreach (var item in allDefsListForReading)
@@ -79,7 +79,7 @@ internal class patch_DrugPolicy_InitializeIfNeeded
         var list4 = new List<DrugPolicyEntry>();
         foreach (var item4 in allDefsListForReading)
         {
-            if (item4.category == ThingCategory.Item && item4.FirstThingCategory == ThingCategoryDefOf.FoodMeals)
+            if (item4.category == ThingCategory.Item && item4.FirstThingCategory == ThingCategoryDefOf.Foods)
             {
                 list4.Add(new DrugPolicyEntry
                 {

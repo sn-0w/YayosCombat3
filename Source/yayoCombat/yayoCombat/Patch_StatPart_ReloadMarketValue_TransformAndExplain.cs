@@ -5,8 +5,8 @@ using Verse;
 
 namespace yayoCombat;
 
-[HarmonyPatch(typeof(StatPart_ReloadMarketValue), "TransformAndExplain")]
-public class Patch_StatPart_ReloadMarketValue_TransformAndExplain
+[HarmonyPatch(typeof(StatPart_ReloadMarketValue), nameof(StatPart_ReloadMarketValue.TransformAndExplain))]
+public class patch_StatPart_ReloadMarketValue_TransformAndExplain
 {
     [HarmonyPrefix]
     private static bool Prefix(StatRequest req, ref float val, StringBuilder explanation)
@@ -16,22 +16,22 @@ public class Patch_StatPart_ReloadMarketValue_TransformAndExplain
             return true;
         }
 
-        var compReloadable = req.Thing.TryGetComp<CompReloadable>();
-        if (compReloadable == null)
+        var CompApparelReloadable = req.Thing.TryGetComp<CompApparelReloadable>();
+        if (CompApparelReloadable == null)
         {
             return true;
         }
 
-        if (compReloadable.AmmoDef == null || compReloadable.RemainingCharges == 0)
+        if (CompApparelReloadable.AmmoDef == null || CompApparelReloadable.RemainingCharges == 0)
         {
             return false;
         }
 
-        var remainingCharges = compReloadable.RemainingCharges;
-        var num = compReloadable.AmmoDef.BaseMarketValue * remainingCharges;
+        var remainingCharges = CompApparelReloadable.RemainingCharges;
+        var num = CompApparelReloadable.AmmoDef.BaseMarketValue * remainingCharges;
         val += num;
         explanation?.AppendLine(
-            "StatsReport_ReloadMarketValue".Translate(compReloadable.AmmoDef.Named("AMMO"),
+            "StatsReport_ReloadMarketValue".Translate(CompApparelReloadable.AmmoDef.Named("AMMO"),
                 remainingCharges.Named("COUNT")) + ": " + num.ToStringMoneyOffset());
 
         return false;

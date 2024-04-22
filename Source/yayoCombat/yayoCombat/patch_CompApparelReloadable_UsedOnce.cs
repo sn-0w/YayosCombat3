@@ -3,11 +3,11 @@ using RimWorld;
 
 namespace yayoCombat;
 
-[HarmonyPatch(typeof(CompReloadable), "UsedOnce")]
-internal class patch_CompReloadable_UsedOnce
+[HarmonyPatch(typeof(CompApparelReloadable), nameof(CompApparelReloadable.UsedOnce))]
+internal class patch_CompApparelReloadable_UsedOnce
 {
     [HarmonyPostfix]
-    private static void Postfix(CompReloadable __instance)
+    private static void Postfix(CompApparelReloadable __instance)
     {
         if (!yayoCombat.ammo || __instance.Wearer == null)
         {

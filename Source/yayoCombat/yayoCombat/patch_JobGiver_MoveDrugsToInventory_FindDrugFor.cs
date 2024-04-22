@@ -5,7 +5,7 @@ using Verse.AI;
 
 namespace yayoCombat;
 
-[HarmonyPatch(typeof(JobGiver_MoveDrugsToInventory), "FindDrugFor")]
+[HarmonyPatch(typeof(JobGiver_MoveDrugsToInventory), nameof(JobGiver_MoveDrugsToInventory.FindDrugFor_NewTemp))]
 internal class patch_JobGiver_MoveDrugsToInventory_FindDrugFor
 {
     [HarmonyPrefix]

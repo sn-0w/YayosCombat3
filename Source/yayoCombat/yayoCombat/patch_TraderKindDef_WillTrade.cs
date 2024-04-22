@@ -4,7 +4,7 @@ using Verse;
 
 namespace yayoCombat;
 
-[HarmonyPatch(typeof(TraderKindDef), "WillTrade")]
+[HarmonyPatch(typeof(TraderKindDef), nameof(TraderKindDef.WillTrade))]
 internal class patch_TraderKindDef_WillTrade
 {
     [HarmonyPrefix]

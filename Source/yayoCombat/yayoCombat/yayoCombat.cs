@@ -45,14 +45,6 @@ public class yayoCombat : ModBase
 
     public static int supplyAmmoDist;
 
-    public static bool advAni;
-
-    public static float meleeDelay;
-
-    public static float meleeRandom;
-
-    public static bool ani_twirl;
-
     public static bool handProtect;
 
     public static bool advArmor;
@@ -87,11 +79,9 @@ public class yayoCombat : ModBase
 
     public static bool enemyRocket;
 
-    public static List<ThingDef> ar_customAmmoDef;
+    public static readonly List<ThingDef> ar_customAmmoDef;
 
     private SettingHandle<int> accEfSetting;
-
-    private SettingHandle<bool> advAniSetting;
 
     private SettingHandle<bool> advArmorSetting;
 
@@ -100,8 +90,6 @@ public class yayoCombat : ModBase
     private SettingHandle<float> ammoGenSetting;
 
     private SettingHandle<bool> ammoSetting;
-
-    private SettingHandle<bool> ani_twirlSetting;
 
     private SettingHandle<int> armorEfSetting;
 
@@ -122,10 +110,6 @@ public class yayoCombat : ModBase
     private SettingHandle<float> maxBulletSpeedSetting;
 
     private SettingHandle<bool> mechAccSetting;
-
-    private SettingHandle<float> meleeDelaySetting;
-
-    private SettingHandle<float> meleeRandomSetting;
 
     private SettingHandle<int> missBulletHitSetting;
 
@@ -150,10 +134,6 @@ public class yayoCombat : ModBase
         enemyAmmo = 70;
         s_enemyAmmo = 0.7f;
         supplyAmmoDist = 4;
-        advAni = true;
-        meleeDelay = 0.7f;
-        meleeRandom = 1.3f;
-        ani_twirl = true;
         handProtect = true;
         advArmor = true;
         armorEf = 50;
@@ -171,7 +151,7 @@ public class yayoCombat : ModBase
         bulletSpeed = 3f;
         maxBulletSpeed = 200f;
         enemyRocket = false;
-        ar_customAmmoDef = new List<ThingDef>();
+        ar_customAmmoDef = [];
         if (ModsConfig.ActiveModsInLoadOrder.Any(mod => mod.PackageId.ToLower().Contains("DualWield".ToLower())))
         {
             using_dualWeld = true;
@@ -298,17 +278,6 @@ public class yayoCombat : ModBase
         supplyAmmoDistSetting = Settings.GetHandle("supplyAmmoDist", "supplyAmmoDist_title".Translate(),
             "supplyAmmoDist_desc".Translate(), 4);
         supplyAmmoDist = supplyAmmoDistSetting.Value;
-        advAniSetting = Settings.GetHandle("advAni", "advAni_title".Translate(), "advAni_desc".Translate(), true);
-        advAni = advAniSetting.Value;
-        meleeDelaySetting = Settings.GetHandle("meleeDelay", "meleeDelay_title".Translate(),
-            "meleeDelay_desc".Translate(), 0.7f);
-        meleeDelay = meleeDelaySetting.Value;
-        meleeRandomSetting = Settings.GetHandle("meleeRandom", "meleeRandom_title".Translate(),
-            "meleeRandom_desc".Translate(), 1.3f);
-        meleeRandom = meleeRandomSetting.Value;
-        ani_twirlSetting =
-            Settings.GetHandle("ani_twirl", "ani_twirl_title".Translate(), "ani_twirl_desc".Translate(), true);
-        ani_twirl = ani_twirlSetting.Value;
         handProtectSetting = Settings.GetHandle("handProtect", "handProtect_title".Translate(),
             "handProtect_desc".Translate(), true);
         handProtect = handProtectSetting.Value;
@@ -364,12 +333,6 @@ public class yayoCombat : ModBase
         enemyAmmo = enemyAmmoSetting.Value;
         s_enemyAmmo = enemyAmmo / 100f;
         supplyAmmoDist = Mathf.Clamp(supplyAmmoDistSetting.Value, -1, 100);
-        advAni = advAniSetting.Value;
-        meleeDelaySetting.Value = Mathf.Clamp(meleeDelaySetting.Value, 0.2f, 2f);
-        meleeDelay = meleeDelaySetting.Value;
-        meleeRandomSetting.Value = Mathf.Clamp(meleeRandomSetting.Value, 0f, 1.5f);
-        meleeRandom = meleeRandomSetting.Value;
-        ani_twirl = ani_twirlSetting.Value;
         handProtect = handProtectSetting.Value;
         advArmor = advArmorSetting.Value;
         armorEfSetting.Value = Mathf.Clamp(armorEfSetting.Value, 0, 100);
@@ -489,7 +452,7 @@ public class yayoCombat : ModBase
                     continue;
                 }
 
-                var compProperties_Reloadable = new CompProperties_Reloadable();
+                var compProperties_Reloadable = new CompProperties_ApparelReloadable();
                 var num = verbProperties.burstShotCount /
                           ((verbProperties.ticksBetweenBurstShots * 0.016666f * verbProperties.burstShotCount) +
                            verbProperties.warmupTime +
@@ -498,7 +461,7 @@ public class yayoCombat : ModBase
                 compProperties_Reloadable.maxCharges = Mathf.Max(3, Mathf.RoundToInt(num2 * num * maxAmmo));
                 compProperties_Reloadable.ammoCountPerCharge = 1;
                 compProperties_Reloadable.baseReloadTicks = Mathf.RoundToInt(60f);
-                compProperties_Reloadable.soundReload = SoundDefOf.Standard_Reload;
+                compProperties_Reloadable.soundReload = DefDatabase<SoundDef>.GetNamed("Standard_Reload");
                 compProperties_Reloadable.hotKey = KeyBindingDefOf.Misc4;
                 compProperties_Reloadable.chargeNoun = "ammo";
                 compProperties_Reloadable.displayGizmoWhileUndrafted = true;
@@ -686,7 +649,7 @@ public class yayoCombat : ModBase
         {
             foreach (var item5 in DefDatabase<RecipeDef>.AllDefs.Where(thing => thing.defName.Contains("yy_ammo")))
             {
-                item5.recipeUsers = new List<ThingDef>();
+                item5.recipeUsers = [];
             }
 
             foreach (var item6 in DefDatabase<ThingDef>.AllDefs.Where(thing => thing.defName.Contains("yy_ammo")))
@@ -710,7 +673,7 @@ public class yayoCombat : ModBase
         var thingDef = ThingDef.Named("Gun_AntiArmor_Rocket");
         if (!enemyRocket)
         {
-            thingDef.weaponTags = new List<string>();
+            thingDef.weaponTags = [];
         }
     }
 

@@ -5,7 +5,7 @@ using Verse;
 
 namespace yayoCombat;
 
-[HarmonyPatch(typeof(ThingWithComps), "GetFloatMenuOptions")]
+[HarmonyPatch(typeof(ThingWithComps), nameof(ThingWithComps.GetFloatMenuOptions))]
 internal class patch_ThingWithComps_GetFloatMenuOptions
 {
     [HarmonyPostfix]
@@ -14,9 +14,10 @@ internal class patch_ThingWithComps_GetFloatMenuOptions
     {
         if (yayoCombat.ammo)
         {
-            var compReloadable = __instance.TryGetComp<CompReloadable>();
-            if (selPawn.IsColonist && compReloadable is { AmmoDef: { } } && !compReloadable.Props.destroyOnEmpty &&
-                compReloadable.RemainingCharges > 0)
+            var CompApparelReloadable = __instance.TryGetComp<CompApparelReloadable>();
+            if (selPawn.IsColonist && CompApparelReloadable is { AmmoDef: not null } &&
+                !CompApparelReloadable.Props.destroyOnEmpty &&
+                CompApparelReloadable.RemainingCharges > 0)
             {
                 __result = new List<FloatMenuOption>
                 {

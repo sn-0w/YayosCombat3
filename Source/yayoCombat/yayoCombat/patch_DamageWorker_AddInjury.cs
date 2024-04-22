@@ -7,13 +7,12 @@ using Verse;
 
 namespace yayoCombat;
 
-[HarmonyPatch(typeof(DamageWorker_AddInjury), "ApplyDamageToPart")]
-[HarmonyPatch(new[]
-{
+[HarmonyPatch(typeof(DamageWorker_AddInjury), nameof(DamageWorker_AddInjury.ApplyDamageToPart))]
+[HarmonyPatch([
     typeof(DamageInfo),
     typeof(Pawn),
     typeof(DamageWorker.DamageResult)
-})]
+])]
 internal class patch_DamageWorker_AddInjury
 {
     [HarmonyPrefix]
@@ -34,7 +33,7 @@ internal class patch_DamageWorker_AddInjury
         dinfo.SetHitPart(exactPartFromDamageInfo);
         var num = dinfo.Amount;
         var deflectedByMetalArmor = false;
-        if (!dinfo.InstantPermanentInjury && !dinfo.IgnoreArmor)
+        if (dinfo is { InstantPermanentInjury: false, IgnoreArmor: false })
         {
             var damageDef = dinfo.Def;
             var diminishedByMetalArmor = false;
@@ -87,7 +86,7 @@ internal class patch_DamageWorker_AddInjury
 
         var methodInfo = typeof(DamageWorker_AddInjury).GetMethod("ApplySpecialEffectsToPart",
             BindingFlags.NonPublic | BindingFlags.Instance);
-        methodInfo?.Invoke(__instance, new object[] { pawn, num, dinfo, result });
+        methodInfo?.Invoke(__instance, [pawn, num, dinfo, result]);
         //__instance.ApplySpecialEffectsToPart(pawn, num, dinfo, result);
         return false;
     }
@@ -130,7 +129,7 @@ internal class patch_DamageWorker_AddInjury
         var hediffDefFromDamage = HealthUtility.GetHediffDefFromDamage(dinfo.Def, pawn, dinfo.HitPart);
         var hediff_Injury = (Hediff_Injury)HediffMaker.MakeHediff(hediffDefFromDamage, pawn);
         hediff_Injury.Part = dinfo.HitPart;
-        hediff_Injury.source = dinfo.Weapon;
+        hediff_Injury.sourceDef = dinfo.Weapon;
         hediff_Injury.sourceBodyPartGroup = dinfo.WeaponBodyPartGroup;
         hediff_Injury.sourceHediffDef = dinfo.WeaponLinkedHediff;
         hediff_Injury.Severity = totalDamage;

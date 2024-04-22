@@ -4,7 +4,7 @@ using Verse;
 
 namespace yayoCombat;
 
-[HarmonyPatch(typeof(ThingFilter), "SetFromPreset")]
+[HarmonyPatch(typeof(ThingFilter), nameof(ThingFilter.SetFromPreset))]
 internal class patch_ThingFilter_SetFromPreset
 {
     [HarmonyPrefix]

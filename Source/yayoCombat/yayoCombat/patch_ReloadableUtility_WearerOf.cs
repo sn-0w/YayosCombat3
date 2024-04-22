@@ -1,21 +1,22 @@
 using HarmonyLib;
 using RimWorld;
+using RimWorld.Utility;
 using Verse;
 
 namespace yayoCombat;
 
-[HarmonyPatch(typeof(ReloadableUtility), "WearerOf")]
+[HarmonyPatch(typeof(ReloadableUtility), nameof(ReloadableUtility.OwnerOf))]
 internal class patch_ReloadableUtility_WearerOf
 {
     [HarmonyPostfix]
-    private static Pawn Postfix(Pawn __result, CompReloadable comp)
+    private static Pawn Postfix(Pawn __result, IReloadableComp reloadable)
     {
         if (!yayoCombat.ammo || __result != null)
         {
             return __result;
         }
 
-        if (comp.ParentHolder is Pawn_EquipmentTracker equipmentTracker)
+        if (reloadable is CompApparelReloadable { ParentHolder: Pawn_EquipmentTracker equipmentTracker })
         {
             __result = equipmentTracker.pawn;
         }

@@ -3,7 +3,7 @@ using RimWorld;
 
 namespace yayoCombat;
 
-[HarmonyPatch(typeof(Building_TurretGun), "MakeGun")]
+[HarmonyPatch(typeof(Building_TurretGun), nameof(Building_TurretGun.MakeGun))]
 internal class patch_Building_TurretGun_MakeGun
 {
     [HarmonyPrefix]
@@ -18,7 +18,7 @@ internal class patch_Building_TurretGun_MakeGun
         var removedReload = false;
         for (var i = 0; i < turretGunDef.comps.Count; i++)
         {
-            if (turretGunDef.comps[i].compClass != typeof(CompReloadable))
+            if (turretGunDef.comps[i].compClass != typeof(CompApparelReloadable))
             {
                 continue;
             }

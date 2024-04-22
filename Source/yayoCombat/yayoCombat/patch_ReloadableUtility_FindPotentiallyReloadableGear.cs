@@ -1,16 +1,17 @@
 using System.Collections.Generic;
 using HarmonyLib;
 using RimWorld;
+using RimWorld.Utility;
 using Verse;
 
 namespace yayoCombat;
 
-[HarmonyPatch(typeof(ReloadableUtility), "FindPotentiallyReloadableGear")]
+[HarmonyPatch(typeof(ReloadableUtility), nameof(ReloadableUtility.FindPotentiallyReloadableGear))]
 internal class patch_ReloadableUtility_FindPotentiallyReloadableGear
 {
     [HarmonyPostfix]
-    private static IEnumerable<Pair<CompReloadable, Thing>> Postfix(IEnumerable<Pair<CompReloadable, Thing>> __result,
-        Pawn pawn, List<Thing> potentialAmmo)
+    private static IEnumerable<Pair<CompApparelReloadable, Thing>> Postfix(
+        IEnumerable<Pair<CompApparelReloadable, Thing>> __result, Pawn pawn, List<Thing> potentialAmmo)
     {
         foreach (var pair in __result)
         {
@@ -29,7 +30,7 @@ internal class patch_ReloadableUtility_FindPotentiallyReloadableGear
 
         foreach (var thing in pawn.equipment.AllEquipmentListForReading)
         {
-            var comp = thing.TryGetComp<CompReloadable>();
+            var comp = thing.TryGetComp<CompApparelReloadable>();
             if (comp?.AmmoDef == null)
             {
                 continue;
@@ -39,7 +40,7 @@ internal class patch_ReloadableUtility_FindPotentiallyReloadableGear
             {
                 if (ammoThing?.def == comp.Props.ammoDef)
                 {
-                    yield return new Pair<CompReloadable, Thing>(comp, ammoThing);
+                    yield return new Pair<CompApparelReloadable, Thing>(comp, ammoThing);
                 }
             }
         }

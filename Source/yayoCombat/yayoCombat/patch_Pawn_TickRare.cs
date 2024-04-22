@@ -4,7 +4,7 @@ using Verse;
 
 namespace yayoCombat;
 
-[HarmonyPatch(typeof(Pawn), "Tick")]
+[HarmonyPatch(typeof(Pawn), nameof(Pawn.Tick))]
 internal class patch_Pawn_TickRare
 {
     [HarmonyPostfix]
@@ -21,13 +21,13 @@ internal class patch_Pawn_TickRare
         var allEquipmentListForReading = __instance.equipment.AllEquipmentListForReading;
         foreach (var item in allEquipmentListForReading)
         {
-            var compReloadable = item.TryGetComp<CompReloadable>();
-            if (compReloadable == null)
+            var CompApparelReloadable = item.TryGetComp<CompApparelReloadable>();
+            if (CompApparelReloadable == null)
             {
                 continue;
             }
 
-            reloadUtility.tryAutoReload(compReloadable);
+            reloadUtility.tryAutoReload(CompApparelReloadable);
             break;
         }
     }
