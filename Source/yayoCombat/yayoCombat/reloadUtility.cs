@@ -98,81 +98,92 @@ internal class reloadUtility
 
     public static void tryAutoReload(CompApparelReloadable cp)
     {
-        if (cp.RemainingCharges > 0)
+        if (cp == null || cp.RemainingCharges > 0 || cp.AmmoDef == null)
         {
             return;
         }
 
         var p = cp.Wearer;
-        var list = p.inventory.innerContainer.ToList();
-        var list2 = new List<Thing>();
-        foreach (var thing in list)
+        if (p?.inventory?.innerContainer == null)
         {
-            if (thing.def == cp.AmmoDef)
+            return;
+        }
+
+        var inventory = p.inventory.innerContainer.ToList();
+        var thingsToReload = new List<Thing>();
+        foreach (var thing in inventory)
+        {
+            if (thing != null && thing.def == cp.AmmoDef)
             {
-                list2.Add(thing);
+                thingsToReload.Add(thing);
             }
         }
 
-        if (list2.Count == 0 && !p.RaceProps.Humanlike && yayoCombat.refillMechAmmo)
+
+        if (thingsToReload.Count == 0 && !p.RaceProps.Humanlike && yayoCombat.refillMechAmmo)
         {
             var thing = ThingMaker.MakeThing(cp.AmmoDef);
             thing.stackCount = cp.MaxAmmoNeeded(true);
             p.inventory.innerContainer.TryAdd(thing);
-            list2.Add(thing);
+            thingsToReload.Add(thing);
         }
 
-        if (list2.Count > 0)
+        if (thingsToReload.Count > 0)
         {
-            var list3 = new List<Thing>();
-            var num = cp.MaxAmmoNeeded(true);
-            for (var num2 = list2.Count - 1; num2 >= 0; num2--)
+            var reloadedThings = new List<Thing>();
+            var maxAmmoNeeded = cp.MaxAmmoNeeded(true);
+            for (var i = thingsToReload.Count - 1; i >= 0; i--)
             {
-                var num3 = Mathf.Min(num, list2[num2].stackCount);
-                if (!p.inventory.innerContainer.TryDrop(list2[num2], p.Position, p.Map, ThingPlaceMode.Direct, num3,
-                        out var resultingThing))
+                var ammoToUse = Mathf.Min(maxAmmoNeeded, thingsToReload[i].stackCount);
+                if (!p.inventory.innerContainer.TryDrop(thingsToReload[i], p.Position, p.Map, ThingPlaceMode.Direct,
+                        ammoToUse, out var resultingThing) && !p.inventory.innerContainer.TryDrop(thingsToReload[i],
+                        p.Position, p.Map, ThingPlaceMode.Near, ammoToUse, out resultingThing))
                 {
-                    p.inventory.innerContainer.TryDrop(list2[num2], p.Position, p.Map, ThingPlaceMode.Near, num3,
-                        out resultingThing);
+                    continue; // cant generate item?
                 }
 
-                if (num3 > 0)
+                if (resultingThing != null && ammoToUse > 0)
                 {
-                    num -= num3;
-                    list3.Add(resultingThing);
+                    maxAmmoNeeded -= ammoToUse;
+                    reloadedThings.Add(resultingThing);
                 }
 
-                if (num <= 0)
+                if (maxAmmoNeeded <= 0)
                 {
                     break;
                 }
             }
 
-            if (list3.Count <= 0)
+            if (reloadedThings.Count <= 0)
             {
                 return;
             }
 
-            var job = JobMaker.MakeJob(RimWorld.JobDefOf.Reload, cp.parent);
-            job.targetQueueB = list3.Select(t => new LocalTargetInfo(t)).ToList();
-            job.count = list3.Sum(t => t.stackCount);
+
+            var job = JobMaker.MakeJob(RimWorld.JobDefOf.Reload, cp.ReloadableThing); // cp.parent ?
+            job.targetQueueB = reloadedThings.Select(t => new LocalTargetInfo(t)).ToList();
+            job.count = reloadedThings.Sum(t => t.stackCount);
             job.count = Math.Min(job.count, cp.MaxAmmoNeeded(true));
             p.jobs.TryTakeOrderedJob(job, JobTag.Misc);
             p.jobs.jobQueue.EnqueueLast(JobMaker.MakeJob(RimWorld.JobDefOf.Goto, p.Position));
+            return;
         }
-        else if (yayoCombat.supplyAmmoDist >= 0)
-        {
-            var list4 = RefuelWorkGiverUtility.FindEnoughReservableThings(
-                desiredQuantity: new IntRange(cp.MinAmmoNeeded(false), cp.MaxAmmoNeeded(false)), pawn: p,
-                rootCell: p.Position,
-                validThing: t => t.def == cp.AmmoDef && p.Position.DistanceTo(t.Position) <= yayoCombat.supplyAmmoDist);
-            if (list4 == null || p.jobs.jobQueue.ToList().Count > 0)
-            {
-                return;
-            }
 
-            p.jobs.TryTakeOrderedJob(JobGiver_Reload.MakeReloadJob(cp, list4), JobTag.Misc);
-            p.jobs.jobQueue.EnqueueLast(JobMaker.MakeJob(RimWorld.JobDefOf.Goto, p.Position));
+        if (yayoCombat.supplyAmmoDist < 0)
+        {
+            return;
         }
+
+        var reservableThings = RefuelWorkGiverUtility.FindEnoughReservableThings(
+            desiredQuantity: new IntRange(cp.MinAmmoNeeded(false), cp.MaxAmmoNeeded(false)), pawn: p,
+            rootCell: p.Position,
+            validThing: t => t.def == cp.AmmoDef && p.Position.DistanceTo(t.Position) <= yayoCombat.supplyAmmoDist);
+        if (reservableThings == null || p.jobs.jobQueue.ToList().Count > 0)
+        {
+            return;
+        }
+
+        p.jobs.TryTakeOrderedJob(JobGiver_Reload.MakeReloadJob(cp, reservableThings), JobTag.Misc);
+        p.jobs.jobQueue.EnqueueLast(JobMaker.MakeJob(RimWorld.JobDefOf.Goto, p.Position));
     }
 }

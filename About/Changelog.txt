@@ -1,5 +1,11 @@
 # Changelog for YayosCombat3
 
+1.5.0 - Updated for 1.5
+Majority of the update-work done by Ferris
+Removed the animations since Yayos Animations already does this
+Used DeepL to update translations for ChineseSimplified, French, German, Russian
+
+
 1.4.3 - Added support for [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2944488802]Melee Animation[/url]
 
 

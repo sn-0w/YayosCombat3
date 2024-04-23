@@ -16,19 +16,14 @@ internal class patch_ThingWithComps_GetGizmos
             yield return gizmo;
         }
 
-        if (!yayoCombat.ammo)
+        if (!yayoCombat.ammo || !PawnAttackGizmoUtility.CanShowEquipmentGizmos())
         {
             yield break;
         }
 
-        if (!PawnAttackGizmoUtility.CanShowEquipmentGizmos())
+        foreach (var thingWithComps in __instance.AllEquipmentListForReading)
         {
-            yield break;
-        }
-
-        foreach (var thing in __instance.AllEquipmentListForReading)
-        {
-            foreach (var comp in thing.AllComps)
+            foreach (var comp in thingWithComps.AllComps)
             {
                 foreach (var gizmo in comp.CompGetWornGizmosExtra())
                 {

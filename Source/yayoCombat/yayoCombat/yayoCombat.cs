@@ -45,6 +45,10 @@ public class yayoCombat : ModBase
 
     public static int supplyAmmoDist;
 
+    public static float meleeDelay;
+
+    public static float meleeRandom;
+
     public static bool handProtect;
 
     public static bool advArmor;
@@ -111,6 +115,10 @@ public class yayoCombat : ModBase
 
     private SettingHandle<bool> mechAccSetting;
 
+    private SettingHandle<float> meleeDelaySetting;
+
+    private SettingHandle<float> meleeRandomSetting;
+
     private SettingHandle<int> missBulletHitSetting;
 
     private SettingHandle<bool> refillMechAmmoSetting;
@@ -134,6 +142,8 @@ public class yayoCombat : ModBase
         enemyAmmo = 70;
         s_enemyAmmo = 0.7f;
         supplyAmmoDist = 4;
+        meleeDelay = 0.7f;
+        meleeRandom = 1.3f;
         handProtect = true;
         advArmor = true;
         armorEf = 50;
@@ -278,6 +288,12 @@ public class yayoCombat : ModBase
         supplyAmmoDistSetting = Settings.GetHandle("supplyAmmoDist", "supplyAmmoDist_title".Translate(),
             "supplyAmmoDist_desc".Translate(), 4);
         supplyAmmoDist = supplyAmmoDistSetting.Value;
+        meleeDelaySetting = Settings.GetHandle("meleeDelay", "meleeDelayNew_title".Translate(),
+            "meleeDelayNew_desc".Translate(), 0.7f);
+        meleeDelay = meleeDelaySetting.Value;
+        meleeRandomSetting = Settings.GetHandle("meleeRandom", "meleeRandomNew_title".Translate(),
+            "meleeRandomNew_desc".Translate(), 1.3f);
+        meleeRandom = meleeRandomSetting.Value;
         handProtectSetting = Settings.GetHandle("handProtect", "handProtect_title".Translate(),
             "handProtect_desc".Translate(), true);
         handProtect = handProtectSetting.Value;
@@ -333,6 +349,10 @@ public class yayoCombat : ModBase
         enemyAmmo = enemyAmmoSetting.Value;
         s_enemyAmmo = enemyAmmo / 100f;
         supplyAmmoDist = Mathf.Clamp(supplyAmmoDistSetting.Value, -1, 100);
+        meleeDelaySetting.Value = Mathf.Clamp(meleeDelaySetting.Value, 0.2f, 2f);
+        meleeDelay = meleeDelaySetting.Value;
+        meleeRandomSetting.Value = Mathf.Clamp(meleeRandomSetting.Value, 0f, 1.5f);
+        meleeRandom = meleeRandomSetting.Value;
         handProtect = handProtectSetting.Value;
         advArmor = advArmorSetting.Value;
         armorEfSetting.Value = Mathf.Clamp(armorEfSetting.Value, 0, 100);

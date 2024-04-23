@@ -10,7 +10,7 @@ internal class patch_CompApparelVerbOwner_CreateVerbTargetCommand
     [HarmonyPrefix]
     private static bool Prefix(ref Command_VerbTarget __result, CompApparelVerbOwner __instance, Thing gear, Verb verb)
     {
-        if (__instance is not CompApparelReloadable value)
+        if (__instance is not CompApparelReloadable compApparelReloadable)
         {
             return true;
         }
@@ -33,6 +33,9 @@ internal class patch_CompApparelVerbOwner_CreateVerbTargetCommand
             commandReloadable.icon = verb.verbProps.defaultProjectile.uiIcon;
             commandReloadable.iconAngle = verb.verbProps.defaultProjectile.uiIconAngle;
             commandReloadable.iconOffset = verb.verbProps.defaultProjectile.uiIconOffset;
+            commandReloadable.defaultLabel =
+                $"{compApparelReloadable.RemainingCharges}/{compApparelReloadable.MaxAmmoAmount()}";
+            commandReloadable.defaultDesc = verb.verbProps.defaultProjectile.LabelCap;
             if (verb.verbProps.defaultProjectile.graphicData != null)
             {
                 commandReloadable.defaultIconColor = verb.verbProps.defaultProjectile.graphicData.color;
@@ -57,7 +60,8 @@ internal class patch_CompApparelVerbOwner_CreateVerbTargetCommand
         }
         else if (!__instance.CanBeUsed(out _))
         {
-            commandReloadable.Disable(value.DisabledReason(value.MinAmmoNeeded(false), value.MaxAmmoNeeded(false)));
+            commandReloadable.Disable(compApparelReloadable.DisabledReason(compApparelReloadable.MinAmmoNeeded(false),
+                compApparelReloadable.MaxAmmoNeeded(false)));
         }
 
         __result = commandReloadable;

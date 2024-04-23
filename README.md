@@ -9,6 +9,7 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2513695736
 
 - Fixed the missing config-text
 - Added in the various fixes XT-0xFF and PrincessOfEvil in the https://github.com/Ogliss/Yayos-Combat-3/tree/Dev-1.3]dev-branch of the original git-repository
+- If https://steamcommunity.com/sharedfiles/filedetails/?id=2944488802]Melee Animation is loaded the advanced animations is only used for ranged weapons
 
 ![Image](https://i.imgur.com/pufA0kM.png)
 
@@ -24,21 +25,12 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2513695736
 
 
 
-
-![Image](https://i.imgur.com/p7Fv1Z6.gif)
-
-
-
-
-
 # *** Gorgeous melee combat Animation**
 
 Slash, sting, head attack, down attack
 
 
 ![Image](https://i.imgur.com/ygYZwe2.gif)
-
-
 
 
 
@@ -51,8 +43,6 @@ Aiming, reloading, rotating reloading
 
 
 
-
-
 # *** Powerful armor algorithm**
 
 Penetration becomes very important.
@@ -60,8 +50,6 @@ High-tech armor is no longer pierced by Low-tech weapon
 
 
 ![Image](https://i.imgur.com/9P76nG3.gif)
-
-
 
 
 
@@ -83,13 +71,10 @@ For example, flamethrowers require industrial explosive ammunition.
 
 
 
-
 You can set the loadout of ammo and medicine in the drug policy.
 
 
 ![Image](https://imgur.com/TVI7EQR.png)
-
-
 
 
 
@@ -104,15 +89,11 @@ You can set the loadout of ammo and medicine in the drug policy.
 
 
 
-
-
 # *** Options to control all of this**
 
 
 
 ![Image](https://imgur.com/forUaNt.png)
-
-
 
 
 
@@ -134,8 +115,6 @@ You can set the loadout of ammo and medicine in the drug policy.
 - The percentage of durability at which the bullet starts to hit is determined by comparing penetration and defense.
 
 - Reduce enemy armor's durability first with weapons with high tech levels and high penetration. And put the bullets at the weakened ones
-
-
 
 
 # *** Load Order**
@@ -194,18 +173,12 @@ set custom ammo for weapon
 
 https://github.com/rimworldYayo/Yayo-s-Combat/wiki/
 
-
-
-![Image](https://i.imgur.com/p7Fv1Z6.gif)
-
-
-
-
 ----------------
 
 We will no longer update mods.
 Since the source code is included and uploaded, you can receive the source code by subscribing to the mod.
 Any mods are allowed to be uploaded fresh, and if someone wants to, I'm fine with delegating permission to the mod itself to continue on my behalf. (In this case, I will upload the mod for you, but in the long run, you will have to deal with bugs and rimworld versions)
+
 ![Image](https://i.imgur.com/PwoNOj4.png)
 
 

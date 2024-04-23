@@ -9,19 +9,19 @@ namespace yayoCombat;
 internal class patch_ReloadableUtility_WearerOf
 {
     [HarmonyPostfix]
-    private static Pawn Postfix(Pawn __result, IReloadableComp reloadable)
+    private static void Postfix(ref Pawn __result, IReloadableComp reloadable)
     {
         if (!yayoCombat.ammo || __result != null)
         {
-            return __result;
+            return;
         }
 
-        if (reloadable is CompApparelReloadable { ParentHolder: Pawn_EquipmentTracker equipmentTracker })
+        if (reloadable is CompApparelReloadable
+            {
+                ParentHolder: Pawn_EquipmentTracker { pawn: not null } equipmentTracker
+            })
         {
             __result = equipmentTracker.pawn;
         }
-        // could also check "is Pawn_InventoryTracker inventoryTracker", might cause problems though?
-
-        return __result;
     }
 }
