@@ -1,21 +1,23 @@
-# YayosCombat3
+# [Yayo's Combat 3 (Continued)](https://steamcommunity.com/sharedfiles/filedetails/?id=2854006492)
 
 ![Image](https://i.imgur.com/buuPQel.png)
-
 Update of YAYOs mod
 https://steamcommunity.com/sharedfiles/filedetails/?id=2038409475
 Based on the abandoned 1.3 update by Ogliss
 https://steamcommunity.com/sharedfiles/filedetails/?id=2513695736
 
+## Changes from 1.5
+
+The advanced animations have been removed from the mod, if you want these animations you can add [https://steamcommunity.com/sharedfiles/filedetails/?id=2877292196](Yayo's Animation) as it already does the same animations.
+
 - Fixed the missing config-text
-- Added in the various fixes XT-0xFF and PrincessOfEvil in the https://github.com/Ogliss/Yayos-Combat-3/tree/Dev-1.3]dev-branch of the original git-repository
-- If https://steamcommunity.com/sharedfiles/filedetails/?id=2944488802]Melee Animation is loaded the advanced animations is only used for ranged weapons
+- Added in the various fixes XT-0xFF and PrincessOfEvil in the [https://github.com/Ogliss/Yayos-Combat-3/tree/Dev-1.3](dev-branch) of the original git-repository
+- If [https://steamcommunity.com/sharedfiles/filedetails/?id=2944488802](Melee Animation) is loaded the advanced animations is only used for ranged weapons
+- A big thanks to Ferris that made most of the work for the 1.5 update, without them this would have taken a lot longer!
 
 ![Image](https://i.imgur.com/pufA0kM.png)
-
 	
 ![Image](https://i.imgur.com/Z4GOv8H.png)
-
 
 # *** Completely changes the combat animation and system**
 
@@ -24,23 +26,20 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2513695736
 ![Image](https://i.imgur.com/JtJtPrr.gif)
 
 
+[strike]# *** Gorgeous melee combat Animation**
 
-# *** Gorgeous melee combat Animation**
-
-Slash, sting, head attack, down attack
+Slash, sting, head attack, down attack[/strike]
 
 
 ![Image](https://i.imgur.com/ygYZwe2.gif)
 
 
+[strike]# *** And ranged combat Animation**
 
-# *** And ranged combat Animation**
-
-Aiming, reloading, rotating reloading
+Aiming, reloading, rotating reloading[/strike]
 
 
 ![Image](https://i.imgur.com/CDm4G3e.gif)
-
 
 
 # *** Powerful armor algorithm**
@@ -52,7 +51,6 @@ High-tech armor is no longer pierced by Low-tech weapon
 ![Image](https://i.imgur.com/9P76nG3.gif)
 
 
-
 # *** Ammunition system and Loadout**
 
 All ranged weapons are changed to consume ammunition.
@@ -62,7 +60,6 @@ When the enemy runs out of ammo, they will melee combat with a gun.
 ![Image](https://imgur.com/SWopiu3.gif)
 
 
-
 Ammunition is divided according to techlevel and damage type.
 For example, flamethrowers require industrial explosive ammunition.
 
@@ -70,12 +67,10 @@ For example, flamethrowers require industrial explosive ammunition.
 ![Image](https://imgur.com/LUrOben.png)
 
 
-
 You can set the loadout of ammo and medicine in the drug policy.
 
 
 ![Image](https://imgur.com/TVI7EQR.png)
-
 
 
 # *** Other features**
@@ -94,7 +89,6 @@ You can set the loadout of ammo and medicine in the drug policy.
 
 
 ![Image](https://imgur.com/forUaNt.png)
-
 
 
 # *** Detail**
@@ -182,16 +176,14 @@ Any mods are allowed to be uploaded fresh, and if someone wants to, I'm fine wit
 ![Image](https://i.imgur.com/PwoNOj4.png)
 
 
-
 -  See if the the error persists if you just have this mod and its requirements active.
 -  If not, try adding your other mods until it happens again.
--  Post your error-log using https://steamcommunity.com/workshop/filedetails/?id=818773962]HugsLib or the standalone https://steamcommunity.com/sharedfiles/filedetails/?id=2873415404]Uploader and command Ctrl+F12
+-  Post your error-log using [https://steamcommunity.com/workshop/filedetails/?id=818773962]HugsLib[/url] or the standalone [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2873415404](Uploader) and command Ctrl+F12
 -  For best support, please use the Discord-channel for error-reporting.
 -  Do not report errors by making a discussion-thread, I get no notification of that.
 -  If you have the solution for a problem, please post it to the GitHub repository.
--  Use https://github.com/RimSort/RimSort/releases/latest]RimSort to sort your mods
+-  Use [https://github.com/RimSort/RimSort/releases/latest](RimSort) to sort your mods
 
 
 
-https://steamcommunity.com/sharedfiles/filedetails/changelog/2854006492]![Image](https://img.shields.io/github/v/release/emipa606/YayosCombat3?label=latest%20version&style=plastic&color=9f1111&labelColor=black)
-
+[https://steamcommunity.com/sharedfiles/filedetails/changelog/2854006492]![Image]((https://img.shields.io/github/v/release/emipa606/YayosCombat3?label=latest%20version&style=plastic&color=9f1111&labelColor=black))

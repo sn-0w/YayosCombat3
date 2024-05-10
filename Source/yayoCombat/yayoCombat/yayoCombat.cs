@@ -466,6 +466,7 @@ public class yayoCombat : ModBase
                 var text = "";
                 var verbProperties = item3.Verbs[0];
                 if (verbProperties.verbClass == null || verbProperties.verbClass == typeof(Verb_ShootOneUse) ||
+                    verbProperties.verbClass == typeof(Verb_LaunchProjectileStaticOneUse) ||
                     verbProperties.consumeFuelPerShot > 0f || item3.weaponTags != null &&
                     (item3.weaponTags.Contains("TurretGun") || item3.weaponTags.Contains("Artillery")))
                 {

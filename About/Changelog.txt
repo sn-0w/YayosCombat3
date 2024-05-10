@@ -1,5 +1,8 @@
 # Changelog for YayosCombat3
 
+1.5.1 - Better support for single use weapons, thanks BBLKepling
+
+
 1.5.0 - Updated for 1.5
 Majority of the update-work done by Ferris
 Removed the animations since Yayos Animations already does this
