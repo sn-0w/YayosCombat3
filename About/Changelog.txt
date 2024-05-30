@@ -1,5 +1,8 @@
 # Changelog for YayosCombat3
 
+1.5.2 - Fixed an armor calculation, thanks Gensando for the find
+
+
 1.5.1 - Better support for single use weapons, thanks BBLKepling
 
 

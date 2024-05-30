@@ -302,7 +302,7 @@ public class yayoCombat : ModBase
         advArmor = advArmorSetting.Value;
         armorEfSetting = Settings.GetHandle("armorEf", "armorEf_title".Translate(), "armorEf_desc".Translate(), 50);
         armorEf = armorEfSetting.Value;
-        s_armorEf = accEf / 100f;
+        s_armorEf = armorEf / 100f;
         unprotectDmgSetting = Settings.GetHandle("unprotectDmg", "unprotectDmg_title".Translate(),
             "unprotectDmg_desc".Translate(), 1.1f);
         unprotectDmg = unprotectDmgSetting.Value;
