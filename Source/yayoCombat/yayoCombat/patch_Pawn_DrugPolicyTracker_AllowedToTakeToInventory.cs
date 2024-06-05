@@ -29,14 +29,14 @@ internal class patch_Pawn_DrugPolicyTracker_AllowedToTakeToInventory
 
         if (!thingDef.IsIngestible)
         {
-            Log.Error(thingDef + " is not ingestible.");
+            Log.Error($"{thingDef} is not ingestible.");
             __result = false;
             return false;
         }
 
         if (!thingDef.IsDrug)
         {
-            Log.Error("AllowedToTakeScheduledEver on non-drug " + thingDef);
+            Log.Error($"AllowedToTakeScheduledEver on non-drug {thingDef}");
             __result = false;
             return false;
         }

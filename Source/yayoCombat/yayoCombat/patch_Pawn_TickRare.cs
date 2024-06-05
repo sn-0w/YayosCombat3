@@ -12,7 +12,8 @@ internal class patch_Pawn_TickRare
     private static void Postfix(Pawn __instance)
     {
         if (!yayoCombat.ammo || !__instance.Drafted || Find.TickManager.TicksGame % 60 != 0 ||
-            __instance.CurJobDef != JobDefOf.Wait_Combat && __instance.CurJobDef != JobDefOf.AttackStatic ||
+            __instance.CurJobDef != JobDefOf.Wait_Combat && __instance.CurJobDef != JobDefOf.AttackStatic &&
+            __instance.CurJobDef != JobDefOf.Reload ||
             __instance.equipment == null)
         {
             return;

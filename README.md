@@ -14,32 +14,13 @@ The advanced animations have been removed from the mod, if you want these animat
 - Added in the various fixes XT-0xFF and PrincessOfEvil in the [https://github.com/Ogliss/Yayos-Combat-3/tree/Dev-1.3](dev-branch) of the original git-repository
 - If [https://steamcommunity.com/sharedfiles/filedetails/?id=2944488802](Melee Animation) is loaded the advanced animations is only used for ranged weapons
 - A big thanks to Ferris that made most of the work for the 1.5 update, without them this would have taken a lot longer!
+- Also check out the [https://steamcommunity.com/sharedfiles/filedetails/?id=2796514196](Yayo's Combat 3 - Addon) by Syrus, it contains expanded ammo handling and some compatibility fixes for other mods.
 
 ![Image](https://i.imgur.com/pufA0kM.png)
 	
 ![Image](https://i.imgur.com/Z4GOv8H.png)
 
-# *** Completely changes the combat animation and system**
-
-
-
-![Image](https://i.imgur.com/JtJtPrr.gif)
-
-
-[strike]# *** Gorgeous melee combat Animation**
-
-Slash, sting, head attack, down attack[/strike]
-
-
-![Image](https://i.imgur.com/ygYZwe2.gif)
-
-
-[strike]# *** And ranged combat Animation**
-
-Aiming, reloading, rotating reloading[/strike]
-
-
-![Image](https://i.imgur.com/CDm4G3e.gif)
+# *** Completely changes the combat system**
 
 
 # *** Powerful armor algorithm**

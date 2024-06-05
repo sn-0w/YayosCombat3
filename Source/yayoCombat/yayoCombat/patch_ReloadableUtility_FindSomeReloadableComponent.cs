@@ -16,7 +16,6 @@ internal class patch_ReloadableUtility_FindSomeReloadableComponent
             return;
         }
 
-
         foreach (var thing in pawn.equipment.AllEquipmentListForReading)
         {
             var CompApparelReloadable = thing.TryGetComp<CompApparelReloadable>();
@@ -24,7 +23,6 @@ internal class patch_ReloadableUtility_FindSomeReloadableComponent
             {
                 continue;
             }
-
 
             __result = CompApparelReloadable;
             return;

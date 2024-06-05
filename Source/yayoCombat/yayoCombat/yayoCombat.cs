@@ -499,7 +499,7 @@ public class yayoCombat : ModBase
                         if (containStringByList != "")
                         {
                             var array = containStringByList.Split('/');
-                            text = "yy_" + array[0];
+                            text = $"yy_{array[0]}";
                             if (ThingDef.Named(text) == null)
                             {
                                 text = "";
@@ -594,8 +594,8 @@ public class yayoCombat : ModBase
                                 Mathf.Max(1, Mathf.RoundToInt(projectile.explosionRadius));
                         }
 
-                        text = (int)item3.techLevel >= 5 ? text + "spacer" :
-                            (int)item3.techLevel < 4 ? text + "primitive" : text + "industrial";
+                        text = (int)item3.techLevel >= 5 ? $"{text}spacer" :
+                            (int)item3.techLevel < 4 ? $"{text}primitive" : $"{text}industrial";
                         switch (ammoType)
                         {
                             case en_ammoType.fire:

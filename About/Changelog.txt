@@ -1,5 +1,8 @@
 # Changelog for YayosCombat3
 
+1.5.3 - Ammo should now work for weapons with both regular ammo and ability ammo, for example the Hellcat rifle from Anomaly
+
+
 1.5.2 - Fixed an armor calculation, thanks Gensando for the find
 
 

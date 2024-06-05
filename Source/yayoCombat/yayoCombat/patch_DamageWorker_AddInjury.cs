@@ -142,9 +142,8 @@ internal class patch_DamageWorker_AddInjury
             }
             else
             {
-                Log.Error(string.Concat(
-                    "Tried to create instant permanent injury on Hediff without a GetsPermanent comp: ",
-                    hediffDefFromDamage, " on ", pawn));
+                Log.Error(
+                    $"Tried to create instant permanent injury on Hediff without a GetsPermanent comp: {hediffDefFromDamage} on {pawn}");
             }
         }
 

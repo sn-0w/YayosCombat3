@@ -159,7 +159,6 @@ internal class reloadUtility
                 return;
             }
 
-
             var job = JobMaker.MakeJob(RimWorld.JobDefOf.Reload, cp.ReloadableThing); // cp.parent ?
             job.targetQueueB = reloadedThings.Select(t => new LocalTargetInfo(t)).ToList();
             job.count = reloadedThings.Sum(t => t.stackCount);

@@ -48,6 +48,7 @@ The advanced animations have been removed from the mod, if you want these animat
 - Added in the various fixes XT-0xFF and PrincessOfEvil in the [url=https://github.com/Ogliss/Yayos-Combat-3/tree/Dev-1.3]dev-branch[/url] of the original git-repository
 - If [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2944488802]Melee Animation[/url] is loaded the advanced animations is only used for ranged weapons
 - A big thanks to Ferris that made most of the work for the 1.5 update, without them this would have taken a lot longer!
+- Also check out the [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2796514196]Yayo's Combat 3 - Addon[/url] by Syrus, it contains expanded ammo handling and some compatibility fixes for other mods.
 
 [img]https://i.imgur.com/pufA0kM.png[/img]
 
@@ -64,19 +65,7 @@ The advanced animations have been removed from the mod, if you want these animat
 	
 [img]https://i.imgur.com/Z4GOv8H.png[/img]
 
-[h1][b]* Completely changes the combat animation and system[/b][/h1]
-
-[list][img]https://i.imgur.com/JtJtPrr.gif[/img][/list]
-
-[strike][h1][b]* Gorgeous melee combat Animation[/b][/h1]
-Slash, sting, head attack, down attack[/strike]
-
-[list][img]https://i.imgur.com/ygYZwe2.gif[/img][/list]
-
-[strike][h1][b]* And ranged combat Animation[/b][/h1]
-Aiming, reloading, rotating reloading[/strike]
-
-[list][img]https://i.imgur.com/CDm4G3e.gif[/img][/list]
+[h1][b]* Completely changes the combat system[/b][/h1]
 
 [h1][b]* Powerful armor algorithm[/b][/h1]
 Penetration becomes very important.
@@ -188,5 +177,5 @@ Any mods are allowed to be uploaded fresh, and if someone wants to, I'm fine wit
 [/list]
 
 [url=https://steamcommunity.com/sharedfiles/filedetails/changelog/2854006492][img]https://img.shields.io/github/v/release/emipa606/YayosCombat3?label=latest%20version&amp;style=plastic&amp;color=9f1111&amp;labelColor=black[/img][/url]</description>
-  <modVersion IgnoreIfNoMatchingField="True">1.5.2</modVersion>
+  <modVersion IgnoreIfNoMatchingField="True">1.5.3</modVersion>
 </ModMetaData>
