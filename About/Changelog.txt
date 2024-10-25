@@ -1,5 +1,8 @@
 # Changelog for YayosCombat3
 
+1.5.4 - Fixed an issue reported on the old mod-repo
+
+
 1.5.3 - Ammo should now work for weapons with both regular ammo and ability ammo, for example the Hellcat rifle from Anomaly
 
 

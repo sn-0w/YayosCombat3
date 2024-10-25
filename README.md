@@ -1,6 +1,7 @@
 # [Yayo's Combat 3 (Continued)](https://steamcommunity.com/sharedfiles/filedetails/?id=2854006492)
 
 ![Image](https://i.imgur.com/buuPQel.png)
+
 Update of YAYOs mod
 https://steamcommunity.com/sharedfiles/filedetails/?id=2038409475
 Based on the abandoned 1.3 update by Ogliss
@@ -8,13 +9,13 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2513695736
 
 ## Changes from 1.5
 
-The advanced animations have been removed from the mod, if you want these animations you can add [https://steamcommunity.com/sharedfiles/filedetails/?id=2877292196](Yayo's Animation) as it already does the same animations.
+The advanced animations have been removed from the mod, if you want these animations you can add [Yayo's Animation](https://steamcommunity.com/sharedfiles/filedetails/?id=2877292196) as it already does the same animations.
 
 - Fixed the missing config-text
-- Added in the various fixes XT-0xFF and PrincessOfEvil in the [https://github.com/Ogliss/Yayos-Combat-3/tree/Dev-1.3](dev-branch) of the original git-repository
-- If [https://steamcommunity.com/sharedfiles/filedetails/?id=2944488802](Melee Animation) is loaded the advanced animations is only used for ranged weapons
+- Added in the various fixes XT-0xFF and PrincessOfEvil in the [dev-branch](https://github.com/Ogliss/Yayos-Combat-3/tree/Dev-1.3) of the original git-repository
+- If [Melee Animation](https://steamcommunity.com/sharedfiles/filedetails/?id=2944488802) is loaded the advanced animations is only used for ranged weapons
 - A big thanks to Ferris that made most of the work for the 1.5 update, without them this would have taken a lot longer!
-- Also check out the [https://steamcommunity.com/sharedfiles/filedetails/?id=2796514196](Yayo's Combat 3 - Addon) by Syrus, it contains expanded ammo handling and some compatibility fixes for other mods.
+- Also check out the [Yayo's Combat 3 - Addon](https://steamcommunity.com/sharedfiles/filedetails/?id=2796514196) by Syrus, it contains expanded ammo handling and some compatibility fixes for other mods.
 
 ![Image](https://i.imgur.com/pufA0kM.png)
 	
@@ -157,14 +158,15 @@ Any mods are allowed to be uploaded fresh, and if someone wants to, I'm fine wit
 ![Image](https://i.imgur.com/PwoNOj4.png)
 
 
+
 -  See if the the error persists if you just have this mod and its requirements active.
 -  If not, try adding your other mods until it happens again.
--  Post your error-log using [https://steamcommunity.com/workshop/filedetails/?id=818773962]HugsLib[/url] or the standalone [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2873415404](Uploader) and command Ctrl+F12
+-  Post your error-log using [HugsLib](https://steamcommunity.com/workshop/filedetails/?id=818773962) or the standalone [Uploader](https://steamcommunity.com/sharedfiles/filedetails/?id=2873415404) and command Ctrl+F12
 -  For best support, please use the Discord-channel for error-reporting.
 -  Do not report errors by making a discussion-thread, I get no notification of that.
 -  If you have the solution for a problem, please post it to the GitHub repository.
--  Use [https://github.com/RimSort/RimSort/releases/latest](RimSort) to sort your mods
+-  Use [RimSort](https://github.com/RimSort/RimSort/releases/latest) to sort your mods
 
+ 
 
-
-[https://steamcommunity.com/sharedfiles/filedetails/changelog/2854006492]![Image]((https://img.shields.io/github/v/release/emipa606/YayosCombat3?label=latest%20version&style=plastic&color=9f1111&labelColor=black))
+[![Image](https://img.shields.io/github/v/release/emipa606/YayosCombat3?label=latest%20version&style=plastic&color=9f1111&labelColor=black)](https://steamcommunity.com/sharedfiles/filedetails/changelog/2854006492) | tags:  ammo, combat,  armor
