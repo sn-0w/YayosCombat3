@@ -24,10 +24,14 @@ public class yayoCombat : ModBase
 
     public static readonly bool using_Oversized;
 
-    public static readonly Dictionary<ThingDef, Vector3> southOffsets = new Dictionary<ThingDef, Vector3>();
-    public static readonly Dictionary<ThingDef, Vector3> northOffsets = new Dictionary<ThingDef, Vector3>();
-    public static readonly Dictionary<ThingDef, Vector3> eastOffsets = new Dictionary<ThingDef, Vector3>();
-    public static readonly Dictionary<ThingDef, Vector3> westOffsets = new Dictionary<ThingDef, Vector3>();
+    public static readonly Dictionary<ThingDef, Vector3> southOffsets =
+        new Dictionary<ThingDef, Vector3>();
+    public static readonly Dictionary<ThingDef, Vector3> northOffsets =
+        new Dictionary<ThingDef, Vector3>();
+    public static readonly Dictionary<ThingDef, Vector3> eastOffsets =
+        new Dictionary<ThingDef, Vector3>();
+    public static readonly Dictionary<ThingDef, Vector3> westOffsets =
+        new Dictionary<ThingDef, Vector3>();
 
     public static Dictionary<Thing, Tuple<Vector3, float>> weaponLocations;
 
@@ -162,25 +166,38 @@ public class yayoCombat : ModBase
         maxBulletSpeed = 200f;
         enemyRocket = false;
         ar_customAmmoDef = [];
-        if (ModsConfig.ActiveModsInLoadOrder.Any(mod => mod.PackageId.ToLower().Contains("DualWield".ToLower())))
+        if (
+            ModsConfig.ActiveModsInLoadOrder.Any(mod =>
+                mod.PackageId.ToLower().Contains("DualWield".ToLower())
+            )
+        )
         {
             using_dualWeld = true;
         }
 
-        if (ModsConfig.ActiveModsInLoadOrder.Any(mod =>
-                mod.PackageId.ToLower().Contains("co.uk.epicguru.meleeanimation".ToLower())))
+        if (
+            ModsConfig.ActiveModsInLoadOrder.Any(mod =>
+                mod.PackageId.ToLower().Contains("co.uk.epicguru.meleeanimation".ToLower())
+            )
+        )
         {
             using_meleeAnimations = true;
         }
 
-        if (ModsConfig.ActiveModsInLoadOrder.Any(mod =>
-                mod.PackageId.ToLower().Contains("erdelf.HumanoidAlienRaces".ToLower())))
+        if (
+            ModsConfig.ActiveModsInLoadOrder.Any(mod =>
+                mod.PackageId.ToLower().Contains("erdelf.HumanoidAlienRaces".ToLower())
+            )
+        )
         {
             using_AlienRaces = true;
         }
 
-        if (ModsConfig.ActiveModsInLoadOrder.Any(mod =>
-                mod.PackageId.ToLower().Contains("Mlie.ShowMeYourHands".ToLower())))
+        if (
+            ModsConfig.ActiveModsInLoadOrder.Any(mod =>
+                mod.PackageId.ToLower().Contains("Mlie.ShowMeYourHands".ToLower())
+            )
+        )
         {
             using_showHands = true;
         }
@@ -191,7 +208,9 @@ public class yayoCombat : ModBase
             return;
         }
 
-        var allWeapons = DefDatabase<ThingDef>.AllDefsListForReading.Where(def => def.IsWeapon).ToList();
+        var allWeapons = DefDatabase<ThingDef>
+            .AllDefsListForReading.Where(def => def.IsWeapon)
+            .ToList();
         foreach (var weapon in allWeapons)
         {
             saveWeaponOffsets(weapon);
@@ -232,8 +251,9 @@ public class yayoCombat : ModBase
 
     private static void saveWeaponOffsets(ThingDef weapon)
     {
-        var thingComp =
-            weapon.comps.FirstOrDefault(y => y.GetType().ToString().Contains("CompOversizedWeapon"));
+        var thingComp = weapon.comps.FirstOrDefault(y =>
+            y.GetType().ToString().Contains("CompOversizedWeapon")
+        );
         if (thingComp == null)
         {
             return;
@@ -247,24 +267,28 @@ public class yayoCombat : ModBase
             switch (fieldInfo.Name)
             {
                 case "northOffset":
-                    northOffsets[weapon] = fieldInfo.GetValue(thingComp) is Vector3
-                        ? (Vector3)fieldInfo.GetValue(thingComp)
-                        : Vector3.zero;
+                    northOffsets[weapon] =
+                        fieldInfo.GetValue(thingComp) is Vector3
+                            ? (Vector3)fieldInfo.GetValue(thingComp)
+                            : Vector3.zero;
                     break;
                 case "southOffset":
-                    southOffsets[weapon] = fieldInfo.GetValue(thingComp) is Vector3
-                        ? (Vector3)fieldInfo.GetValue(thingComp)
-                        : Vector3.zero;
+                    southOffsets[weapon] =
+                        fieldInfo.GetValue(thingComp) is Vector3
+                            ? (Vector3)fieldInfo.GetValue(thingComp)
+                            : Vector3.zero;
                     break;
                 case "westOffset":
-                    westOffsets[weapon] = fieldInfo.GetValue(thingComp) is Vector3
-                        ? (Vector3)fieldInfo.GetValue(thingComp)
-                        : Vector3.zero;
+                    westOffsets[weapon] =
+                        fieldInfo.GetValue(thingComp) is Vector3
+                            ? (Vector3)fieldInfo.GetValue(thingComp)
+                            : Vector3.zero;
                     break;
                 case "eastOffset":
-                    eastOffsets[weapon] = fieldInfo.GetValue(thingComp) is Vector3
-                        ? (Vector3)fieldInfo.GetValue(thingComp)
-                        : Vector3.zero;
+                    eastOffsets[weapon] =
+                        fieldInfo.GetValue(thingComp) is Vector3
+                            ? (Vector3)fieldInfo.GetValue(thingComp)
+                            : Vector3.zero;
                     break;
             }
         }
@@ -272,70 +296,164 @@ public class yayoCombat : ModBase
 
     public override void DefsLoaded()
     {
-        ammoSetting = Settings.GetHandle("ammo", "ammo_title".Translate(), "ammo_desc".Translate(), false);
+        ammoSetting = Settings.GetHandle(
+            "ammo",
+            "ammo_title".Translate(),
+            "ammo_desc".Translate(),
+            false
+        );
         ammo = ammoSetting.Value;
-        refillMechAmmoSetting = Settings.GetHandle("refillMechAmmo", "refillMechAmmo_title".Translate(),
-            "refillMechAmmo_desc".Translate(), true);
+        refillMechAmmoSetting = Settings.GetHandle(
+            "refillMechAmmo",
+            "refillMechAmmo_title".Translate(),
+            "refillMechAmmo_desc".Translate(),
+            true
+        );
         refillMechAmmo = refillMechAmmoSetting.Value;
-        ammoGenSetting = Settings.GetHandle("ammoGen", "ammoGen_title".Translate(), "ammoGen_desc".Translate(), 1f);
+        ammoGenSetting = Settings.GetHandle(
+            "ammoGen",
+            "ammoGen_title".Translate(),
+            "ammoGen_desc".Translate(),
+            1f
+        );
         ammoGen = ammoGenSetting.Value;
-        maxAmmoSetting = Settings.GetHandle("maxAmmo", "maxAmmo_title".Translate(), "maxAmmo_desc".Translate(), 1f);
+        maxAmmoSetting = Settings.GetHandle(
+            "maxAmmo",
+            "maxAmmo_title".Translate(),
+            "maxAmmo_desc".Translate(),
+            1f
+        );
         maxAmmo = maxAmmoSetting.Value;
-        enemyAmmoSetting =
-            Settings.GetHandle("enemyAmmo", "enemyAmmo_title".Translate(), "enemyAmmo_desc".Translate(), 70);
+        enemyAmmoSetting = Settings.GetHandle(
+            "enemyAmmo",
+            "enemyAmmo_title".Translate(),
+            "enemyAmmo_desc".Translate(),
+            70
+        );
         enemyAmmo = enemyAmmoSetting.Value;
         s_enemyAmmo = enemyAmmo / 100f;
-        supplyAmmoDistSetting = Settings.GetHandle("supplyAmmoDist", "supplyAmmoDist_title".Translate(),
-            "supplyAmmoDist_desc".Translate(), 4);
+        supplyAmmoDistSetting = Settings.GetHandle(
+            "supplyAmmoDist",
+            "supplyAmmoDist_title".Translate(),
+            "supplyAmmoDist_desc".Translate(),
+            4
+        );
         supplyAmmoDist = supplyAmmoDistSetting.Value;
-        meleeDelaySetting = Settings.GetHandle("meleeDelay", "meleeDelayNew_title".Translate(),
-            "meleeDelayNew_desc".Translate(), 0.7f);
+        meleeDelaySetting = Settings.GetHandle(
+            "meleeDelay",
+            "meleeDelayNew_title".Translate(),
+            "meleeDelayNew_desc".Translate(),
+            0.7f
+        );
         meleeDelay = meleeDelaySetting.Value;
-        meleeRandomSetting = Settings.GetHandle("meleeRandom", "meleeRandomNew_title".Translate(),
-            "meleeRandomNew_desc".Translate(), 1.3f);
+        meleeRandomSetting = Settings.GetHandle(
+            "meleeRandom",
+            "meleeRandomNew_title".Translate(),
+            "meleeRandomNew_desc".Translate(),
+            1.3f
+        );
         meleeRandom = meleeRandomSetting.Value;
-        handProtectSetting = Settings.GetHandle("handProtect", "handProtect_title".Translate(),
-            "handProtect_desc".Translate(), true);
+        handProtectSetting = Settings.GetHandle(
+            "handProtect",
+            "handProtect_title".Translate(),
+            "handProtect_desc".Translate(),
+            true
+        );
         handProtect = handProtectSetting.Value;
-        advArmorSetting =
-            Settings.GetHandle("advArmor", "advArmor_title".Translate(), "advArmor_desc".Translate(), true);
+        advArmorSetting = Settings.GetHandle(
+            "advArmor",
+            "advArmor_title".Translate(),
+            "advArmor_desc".Translate(),
+            true
+        );
         advArmor = advArmorSetting.Value;
-        armorEfSetting = Settings.GetHandle("armorEf", "armorEf_title".Translate(), "armorEf_desc".Translate(), 50);
+        armorEfSetting = Settings.GetHandle(
+            "armorEf",
+            "armorEf_title".Translate(),
+            "armorEf_desc".Translate(),
+            50
+        );
         armorEf = armorEfSetting.Value;
         s_armorEf = armorEf / 100f;
-        unprotectDmgSetting = Settings.GetHandle("unprotectDmg", "unprotectDmg_title".Translate(),
-            "unprotectDmg_desc".Translate(), 1.1f);
+        unprotectDmgSetting = Settings.GetHandle(
+            "unprotectDmg",
+            "unprotectDmg_title".Translate(),
+            "unprotectDmg_desc".Translate(),
+            1.1f
+        );
         unprotectDmg = unprotectDmgSetting.Value;
         unprotectDmgSetting.NeverVisible = true;
-        advShootAccSetting = Settings.GetHandle("advShootAcc", "advShootAcc_title".Translate(),
-            "advShootAcc_desc".Translate(), true);
+        advShootAccSetting = Settings.GetHandle(
+            "advShootAcc",
+            "advShootAcc_title".Translate(),
+            "advShootAcc_desc".Translate(),
+            true
+        );
         advShootAcc = advShootAccSetting.Value;
-        accEfSetting = Settings.GetHandle("accEf", "accEf_title".Translate(), "accEf_desc".Translate(), 60);
+        accEfSetting = Settings.GetHandle(
+            "accEf",
+            "accEf_title".Translate(),
+            "accEf_desc".Translate(),
+            60
+        );
         accEf = accEfSetting.Value;
         s_accEf = accEf / 100f;
-        missBulletHitSetting = Settings.GetHandle("missBulletHit", "missBulletHit_title".Translate(),
-            "missBulletHit_desc".Translate(), 50);
+        missBulletHitSetting = Settings.GetHandle(
+            "missBulletHit",
+            "missBulletHit_title".Translate(),
+            "missBulletHit_desc".Translate(),
+            50
+        );
         missBulletHit = missBulletHitSetting.Value;
         s_missBulletHit = missBulletHit / 100f;
-        mechAccSetting = Settings.GetHandle("mechAcc", "mechAcc_title".Translate(), "mechAcc_desc".Translate(), true);
+        mechAccSetting = Settings.GetHandle(
+            "mechAcc",
+            "mechAcc_title".Translate(),
+            "mechAcc_desc".Translate(),
+            true
+        );
         mechAcc = mechAccSetting.Value;
-        turretAccSetting =
-            Settings.GetHandle("turretAcc", "turretAcc_title".Translate(), "turretAcc_desc".Translate(), true);
+        turretAccSetting = Settings.GetHandle(
+            "turretAcc",
+            "turretAcc_title".Translate(),
+            "turretAcc_desc".Translate(),
+            true
+        );
         turretAcc = turretAccSetting.Value;
-        baseSkillSetting =
-            Settings.GetHandle("baseSkill", "baseSkill_title".Translate(), "baseSkill_desc".Translate(), 5);
+        baseSkillSetting = Settings.GetHandle(
+            "baseSkill",
+            "baseSkill_title".Translate(),
+            "baseSkill_desc".Translate(),
+            5
+        );
         baseSkill = baseSkillSetting.Value;
-        colonistAccSetting = Settings.GetHandle("colonistAcc", "colonistAcc_title".Translate(),
-            "colonistAcc_desc".Translate(), false);
+        colonistAccSetting = Settings.GetHandle(
+            "colonistAcc",
+            "colonistAcc_title".Translate(),
+            "colonistAcc_desc".Translate(),
+            false
+        );
         colonistAcc = colonistAccSetting.Value;
-        bulletSpeedSetting = Settings.GetHandle("bulletSpeed", "bulletSpeed_title".Translate(),
-            "bulletSpeed_desc".Translate(), 3f);
+        bulletSpeedSetting = Settings.GetHandle(
+            "bulletSpeed",
+            "bulletSpeed_title".Translate(),
+            "bulletSpeed_desc".Translate(),
+            3f
+        );
         bulletSpeed = bulletSpeedSetting.Value;
-        maxBulletSpeedSetting = Settings.GetHandle("maxBulletSpeed", "maxBulletSpeed_title".Translate(),
-            "maxBulletSpeed_desc".Translate(), 200f);
+        maxBulletSpeedSetting = Settings.GetHandle(
+            "maxBulletSpeed",
+            "maxBulletSpeed_title".Translate(),
+            "maxBulletSpeed_desc".Translate(),
+            200f
+        );
         maxBulletSpeed = maxBulletSpeedSetting.Value;
-        enemyRocketSetting = Settings.GetHandle("enemyRocket", "useRocket_title".Translate(),
-            "useRocket_desc".Translate(), false);
+        enemyRocketSetting = Settings.GetHandle(
+            "enemyRocket",
+            "useRocket_title".Translate(),
+            "useRocket_desc".Translate(),
+            false
+        );
         enemyRocket = enemyRocketSetting.Value;
         patchDef2();
     }
@@ -379,22 +497,25 @@ public class yayoCombat : ModBase
         enemyRocket = enemyRocketSetting.Value;
     }
 
-    public static void patchDef1()
-    {
-    }
+    public static void patchDef1() { }
 
     public static void patchDef2()
     {
         if (handProtect)
         {
-            foreach (var item in DefDatabase<ThingDef>.AllDefs.Where(thing =>
-                         thing.apparel is { bodyPartGroups.Count: > 0 } &&
-                         (thing.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.Hands) ||
-                          thing.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.Feet)) &&
-                         !thing.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.Torso) &&
-                         !thing.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.FullHead) &&
-                         !thing.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.UpperHead) &&
-                         !thing.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.Shoulders)))
+            foreach (
+                var item in DefDatabase<ThingDef>.AllDefs.Where(thing =>
+                    thing.apparel is { bodyPartGroups.Count: > 0 }
+                    && (
+                        thing.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.Hands)
+                        || thing.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.Feet)
+                    )
+                    && !thing.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.Torso)
+                    && !thing.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.FullHead)
+                    && !thing.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.UpperHead)
+                    && !thing.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.Shoulders)
+                )
+            )
             {
                 var list = new List<ApparelLayerDef>();
                 foreach (var apparelLayerDef in item.apparel.layers)
@@ -425,18 +546,25 @@ public class yayoCombat : ModBase
                 }
             }
 
-            foreach (var item2 in DefDatabase<ThingDef>.AllDefs.Where(thing => thing.apparel is
-                         { bodyPartGroups.Count: > 0 }))
+            foreach (
+                var item2 in DefDatabase<ThingDef>.AllDefs.Where(thing =>
+                    thing.apparel is { bodyPartGroups.Count: > 0 }
+                )
+            )
             {
                 var bodyPartGroups = item2.apparel.bodyPartGroups;
-                if (bodyPartGroups.Contains(BodyPartGroupDefOf.Arms) &&
-                    !bodyPartGroups.Contains(BodyPartGroupDefOf.Hands))
+                if (
+                    bodyPartGroups.Contains(BodyPartGroupDefOf.Arms)
+                    && !bodyPartGroups.Contains(BodyPartGroupDefOf.Hands)
+                )
                 {
                     bodyPartGroups.Add(BodyPartGroupDefOf.Hands);
                 }
 
-                if (bodyPartGroups.Contains(BodyPartGroupDefOf.Legs) &&
-                    !bodyPartGroups.Contains(BodyPartGroupDefOf.Feet))
+                if (
+                    bodyPartGroups.Contains(BodyPartGroupDefOf.Legs)
+                    && !bodyPartGroups.Contains(BodyPartGroupDefOf.Feet)
+                )
                 {
                     bodyPartGroups.Add(BodyPartGroupDefOf.Feet);
                 }
@@ -447,16 +575,40 @@ public class yayoCombat : ModBase
         {
             var ar = new List<string>
             {
-                "frost", "energy", "cryo", "gleam", "laser", "plasma", "beam", "magic", "thunder", "poison",
-                "elec", "wave", "psy", "cold", "tox", "atom", "pulse", "tornado", "water", "liqu",
-                "tele", "matter"
+                "frost",
+                "energy",
+                "cryo",
+                "gleam",
+                "laser",
+                "plasma",
+                "beam",
+                "magic",
+                "thunder",
+                "poison",
+                "elec",
+                "wave",
+                "psy",
+                "cold",
+                "tox",
+                "atom",
+                "pulse",
+                "tornado",
+                "water",
+                "liqu",
+                "tele",
+                "matter",
             };
             var ar2 = new List<string> { "Ice" };
-            foreach (var item3 in DefDatabase<ThingDef>.AllDefs.Where(t =>
-                         t.IsRangedWeapon && t.Verbs is { Count: >= 1 } && (t.modExtensions == null ||
-                                                                            !t.modExtensions.Exists(x =>
-                                                                                x.ToString() ==
-                                                                                "HeavyWeapons.HeavyWeapon"))))
+            foreach (
+                var item3 in DefDatabase<ThingDef>.AllDefs.Where(t =>
+                    t.IsRangedWeapon
+                    && t.Verbs is { Count: >= 1 }
+                    && (
+                        t.modExtensions == null
+                        || !t.modExtensions.Exists(x => x.ToString() == "HeavyWeapons.HeavyWeapon")
+                    )
+                )
+            )
             {
                 if ((int)item3.techLevel <= 1)
                 {
@@ -465,24 +617,43 @@ public class yayoCombat : ModBase
 
                 var text = "";
                 var verbProperties = item3.Verbs[0];
-                if (verbProperties.verbClass == null || verbProperties.verbClass == typeof(Verb_ShootOneUse) ||
-                    verbProperties.verbClass == typeof(Verb_LaunchProjectileStaticOneUse) ||
-                    verbProperties.consumeFuelPerShot > 0f || item3.weaponTags != null &&
-                    (item3.weaponTags.Contains("TurretGun") || item3.weaponTags.Contains("Artillery")))
+                if (
+                    verbProperties.verbClass == null
+                    || verbProperties.verbClass == typeof(Verb_ShootOneUse)
+                    || verbProperties.verbClass == typeof(Verb_LaunchProjectileStaticOneUse)
+                    || verbProperties.consumeFuelPerShot > 0f
+                    || item3.weaponTags != null
+                        && (
+                            item3.weaponTags.Contains("TurretGun")
+                            || item3.weaponTags.Contains("Artillery")
+                        )
+                )
                 {
                     continue;
                 }
 
                 var compProperties_Reloadable = new CompProperties_ApparelReloadable();
-                var num = verbProperties.burstShotCount /
-                          ((verbProperties.ticksBetweenBurstShots * 0.016666f * verbProperties.burstShotCount) +
-                           verbProperties.warmupTime +
-                           item3.statBases.GetStatValueFromList(StatDefOf.RangedWeapon_Cooldown, 0f));
+                var num =
+                    verbProperties.burstShotCount
+                    / (
+                        (
+                            verbProperties.ticksBetweenBurstShots
+                            * 0.016666f
+                            * verbProperties.burstShotCount
+                        )
+                        + verbProperties.warmupTime
+                        + item3.statBases.GetStatValueFromList(StatDefOf.RangedWeapon_Cooldown, 0f)
+                    );
                 var num2 = 90f;
-                compProperties_Reloadable.maxCharges = Mathf.Max(3, Mathf.RoundToInt(num2 * num * maxAmmo));
+                compProperties_Reloadable.maxCharges = Mathf.Max(
+                    3,
+                    Mathf.RoundToInt(num2 * num * maxAmmo)
+                );
                 compProperties_Reloadable.ammoCountPerCharge = 1;
                 compProperties_Reloadable.baseReloadTicks = Mathf.RoundToInt(60f);
-                compProperties_Reloadable.soundReload = DefDatabase<SoundDef>.GetNamed("Standard_Reload");
+                compProperties_Reloadable.soundReload = DefDatabase<SoundDef>.GetNamed(
+                    "Standard_Reload"
+                );
                 compProperties_Reloadable.hotKey = KeyBindingDefOf.Misc4;
                 compProperties_Reloadable.chargeNoun = "ammo";
                 compProperties_Reloadable.displayGizmoWhileUndrafted = true;
@@ -507,12 +678,18 @@ public class yayoCombat : ModBase
 
                             if (array.Length >= 2 && int.TryParse(array[1], out var result))
                             {
-                                compProperties_Reloadable.maxCharges = Mathf.Max(1, Mathf.RoundToInt(result * maxAmmo));
+                                compProperties_Reloadable.maxCharges = Mathf.Max(
+                                    1,
+                                    Mathf.RoundToInt(result * maxAmmo)
+                                );
                             }
 
                             if (array.Length >= 3 && int.TryParse(array[2], out var result2))
                             {
-                                compProperties_Reloadable.ammoCountPerCharge = Mathf.Max(1, result2);
+                                compProperties_Reloadable.ammoCountPerCharge = Mathf.Max(
+                                    1,
+                                    result2
+                                );
                             }
                         }
                     }
@@ -522,60 +699,79 @@ public class yayoCombat : ModBase
                         text = "yy_ammo_";
                         var projectile = verbProperties.defaultProjectile.projectile;
                         en_ammoType ammoType;
-                        if (new List<DamageDef>
+                        if (
+                            new List<DamageDef>
                             {
                                 DamageDefOf.Bomb,
                                 DamageDefOf.Flame,
-                                DamageDefOf.Burn
-                            }.Contains(projectile.damageDef))
+                                DamageDefOf.Burn,
+                            }.Contains(projectile.damageDef)
+                        )
                         {
                             ammoType = en_ammoType.fire;
-                            compProperties_Reloadable.ammoCountPerCharge =
-                                Mathf.Max(1, Mathf.RoundToInt(projectile.explosionRadius));
+                            compProperties_Reloadable.ammoCountPerCharge = Mathf.Max(
+                                1,
+                                Mathf.RoundToInt(projectile.explosionRadius)
+                            );
                         }
-                        else if (new List<DamageDef> { DamageDefOf.Smoke }.Contains(projectile.damageDef))
+                        else if (
+                            new List<DamageDef> { DamageDefOf.Smoke }.Contains(projectile.damageDef)
+                        )
                         {
                             ammoType = en_ammoType.fire;
-                            compProperties_Reloadable.ammoCountPerCharge =
-                                Mathf.Max(1, Mathf.RoundToInt(projectile.explosionRadius / 3f));
+                            compProperties_Reloadable.ammoCountPerCharge = Mathf.Max(
+                                1,
+                                Mathf.RoundToInt(projectile.explosionRadius / 3f)
+                            );
                         }
-                        else if (new List<DamageDef>
-                                 {
-                                     DamageDefOf.EMP,
-                                     DamageDefOf.Deterioration,
-                                     DamageDefOf.Extinguish,
-                                     DamageDefOf.Frostbite,
-                                     DamageDefOf.Rotting,
-                                     DamageDefOf.Stun,
-                                     DamageDefOf.TornadoScratch
-                                 }.Contains(projectile.damageDef))
+                        else if (
+                            new List<DamageDef>
+                            {
+                                DamageDefOf.EMP,
+                                DamageDefOf.Deterioration,
+                                DamageDefOf.Extinguish,
+                                DamageDefOf.Frostbite,
+                                DamageDefOf.Rotting,
+                                DamageDefOf.Stun,
+                                DamageDefOf.TornadoScratch,
+                            }.Contains(projectile.damageDef)
+                        )
                         {
                             ammoType = en_ammoType.emp;
-                            compProperties_Reloadable.ammoCountPerCharge =
-                                Mathf.Max(1, Mathf.RoundToInt(projectile.explosionRadius / 3f));
+                            compProperties_Reloadable.ammoCountPerCharge = Mathf.Max(
+                                1,
+                                Mathf.RoundToInt(projectile.explosionRadius / 3f)
+                            );
                         }
-                        else if (containCheckByList(item3.defName.ToLower(), ar) ||
-                                 containCheckByList(item3.defName, ar2) ||
-                                 containCheckByList(projectile.damageDef.defName.ToLower(), ar) ||
-                                 containCheckByList(projectile.damageDef.defName, ar2))
+                        else if (
+                            containCheckByList(item3.defName.ToLower(), ar)
+                            || containCheckByList(item3.defName, ar2)
+                            || containCheckByList(projectile.damageDef.defName.ToLower(), ar)
+                            || containCheckByList(projectile.damageDef.defName, ar2)
+                        )
                         {
                             ammoType = en_ammoType.emp;
-                            compProperties_Reloadable.ammoCountPerCharge =
-                                Mathf.Max(1, Mathf.RoundToInt(projectile.explosionRadius));
+                            compProperties_Reloadable.ammoCountPerCharge = Mathf.Max(
+                                1,
+                                Mathf.RoundToInt(projectile.explosionRadius)
+                            );
                         }
                         else if (projectile.explosionRadius > 0f)
                         {
-                            compProperties_Reloadable.ammoCountPerCharge =
-                                Mathf.Max(1, Mathf.RoundToInt(projectile.explosionRadius));
-                            ammoType = projectile.damageDef.armorCategory == null
-                                ? en_ammoType.emp
-                                : projectile.damageDef.armorCategory.defName switch
-                                {
-                                    "Sharp" => en_ammoType.fire,
-                                    "Heat" => en_ammoType.fire,
-                                    "Blunt" => en_ammoType.fire,
-                                    _ => en_ammoType.emp
-                                };
+                            compProperties_Reloadable.ammoCountPerCharge = Mathf.Max(
+                                1,
+                                Mathf.RoundToInt(projectile.explosionRadius)
+                            );
+                            ammoType =
+                                projectile.damageDef.armorCategory == null
+                                    ? en_ammoType.emp
+                                    : projectile.damageDef.armorCategory.defName switch
+                                    {
+                                        "Sharp" => en_ammoType.fire,
+                                        "Heat" => en_ammoType.fire,
+                                        "Blunt" => en_ammoType.fire,
+                                        _ => en_ammoType.emp,
+                                    };
                         }
                         else if (projectile.damageDef.armorCategory != null)
                         {
@@ -584,18 +780,22 @@ public class yayoCombat : ModBase
                                 "Sharp" => en_ammoType.normal,
                                 "Heat" => en_ammoType.fire,
                                 "Blunt" => en_ammoType.normal,
-                                _ => en_ammoType.emp
+                                _ => en_ammoType.emp,
                             };
                         }
                         else
                         {
                             ammoType = en_ammoType.emp;
-                            compProperties_Reloadable.ammoCountPerCharge =
-                                Mathf.Max(1, Mathf.RoundToInt(projectile.explosionRadius));
+                            compProperties_Reloadable.ammoCountPerCharge = Mathf.Max(
+                                1,
+                                Mathf.RoundToInt(projectile.explosionRadius)
+                            );
                         }
 
-                        text = (int)item3.techLevel >= 5 ? $"{text}spacer" :
-                            (int)item3.techLevel < 4 ? $"{text}primitive" : $"{text}industrial";
+                        text =
+                            (int)item3.techLevel >= 5 ? $"{text}spacer"
+                            : (int)item3.techLevel < 4 ? $"{text}primitive"
+                            : $"{text}industrial";
                         switch (ammoType)
                         {
                             case en_ammoType.fire:
@@ -627,13 +827,18 @@ public class yayoCombat : ModBase
 
                             if (array2.Length >= 2 && int.TryParse(array2[1], out var result3))
                             {
-                                compProperties_Reloadable.maxCharges =
-                                    Mathf.Max(1, Mathf.RoundToInt(result3 * maxAmmo));
+                                compProperties_Reloadable.maxCharges = Mathf.Max(
+                                    1,
+                                    Mathf.RoundToInt(result3 * maxAmmo)
+                                );
                             }
 
                             if (array2.Length >= 3 && int.TryParse(array2[2], out var result4))
                             {
-                                compProperties_Reloadable.ammoCountPerCharge = Mathf.Max(1, result4);
+                                compProperties_Reloadable.ammoCountPerCharge = Mathf.Max(
+                                    1,
+                                    result4
+                                );
                             }
                         }
                     }
@@ -658,7 +863,11 @@ public class yayoCombat : ModBase
                 item3.comps.Add(compProperties_Reloadable);
             }
 
-            foreach (var item4 in DefDatabase<RecipeDef>.AllDefs.Where(thing => thing.defName.Contains("yy_ammo")))
+            foreach (
+                var item4 in DefDatabase<RecipeDef>.AllDefs.Where(thing =>
+                    thing.defName.Contains("yy_ammo")
+                )
+            )
             {
                 if (item4.products is { Count: > 0 })
                 {
@@ -668,12 +877,20 @@ public class yayoCombat : ModBase
         }
         else
         {
-            foreach (var item5 in DefDatabase<RecipeDef>.AllDefs.Where(thing => thing.defName.Contains("yy_ammo")))
+            foreach (
+                var item5 in DefDatabase<RecipeDef>.AllDefs.Where(thing =>
+                    thing.defName.Contains("yy_ammo")
+                )
+            )
             {
                 item5.recipeUsers = [];
             }
 
-            foreach (var item6 in DefDatabase<ThingDef>.AllDefs.Where(thing => thing.defName.Contains("yy_ammo")))
+            foreach (
+                var item6 in DefDatabase<ThingDef>.AllDefs.Where(thing =>
+                    thing.defName.Contains("yy_ammo")
+                )
+            )
             {
                 item6.tradeability = Tradeability.None;
                 item6.tradeTags = null;
@@ -682,11 +899,16 @@ public class yayoCombat : ModBase
 
         if (advArmor)
         {
-            foreach (var item7 in DefDatabase<PawnKindDef>.AllDefs.Where(pawn =>
-                         pawn.defaultFactionType == FactionDefOf.Mechanoid))
+            foreach (
+                var item7 in DefDatabase<PawnKindDef>.AllDefs.Where(pawn =>
+                    pawn.defaultFactionDef == FactionDefOf.Mechanoid
+                )
+            )
             {
-                item7.race.SetStatBaseValue(StatDefOf.ArmorRating_Sharp,
-                    item7.race.GetStatValueAbstract(StatDefOf.ArmorRating_Sharp) * 1.3f);
+                item7.race.SetStatBaseValue(
+                    StatDefOf.ArmorRating_Sharp,
+                    item7.race.GetStatValueAbstract(StatDefOf.ArmorRating_Sharp) * 1.3f
+                );
                 item7.combatPower *= 1.3f;
             }
         }
@@ -728,6 +950,6 @@ public class yayoCombat : ModBase
     {
         normal,
         fire,
-        emp
+        emp,
     }
 }

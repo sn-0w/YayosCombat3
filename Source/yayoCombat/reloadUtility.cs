@@ -19,10 +19,7 @@ internal class reloadUtility
             return;
         }
 
-        var job = new Job(JobDefOf.EjectAmmo, t)
-        {
-            count = 1
-        };
+        var job = new Job(JobDefOf.EjectAmmo, t) { count = 1 };
         pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
     }
 
@@ -64,7 +61,9 @@ internal class reloadUtility
         while (num > 0)
         {
             var thing = ThingMaker.MakeThing(CompApparelReloadable.AmmoDef);
-            thing.stackCount = Mathf.Min(thing.def.stackLimit, num) * CompApparelReloadable.Props.ammoCountPerCharge;
+            thing.stackCount =
+                Mathf.Min(thing.def.stackLimit, num)
+                * CompApparelReloadable.Props.ammoCountPerCharge;
             if (forbidden)
             {
                 thing.SetForbidden(true);
@@ -119,7 +118,6 @@ internal class reloadUtility
             }
         }
 
-
         if (thingsToReload.Count == 0 && !p.RaceProps.Humanlike && yayoCombat.refillMechAmmo)
         {
             var thing = ThingMaker.MakeThing(cp.AmmoDef);
@@ -135,9 +133,24 @@ internal class reloadUtility
             for (var i = thingsToReload.Count - 1; i >= 0; i--)
             {
                 var ammoToUse = Mathf.Min(maxAmmoNeeded, thingsToReload[i].stackCount);
-                if (!p.inventory.innerContainer.TryDrop(thingsToReload[i], p.Position, p.Map, ThingPlaceMode.Direct,
-                        ammoToUse, out var resultingThing) && !p.inventory.innerContainer.TryDrop(thingsToReload[i],
-                        p.Position, p.Map, ThingPlaceMode.Near, ammoToUse, out resultingThing))
+                if (
+                    !p.inventory.innerContainer.TryDrop(
+                        thingsToReload[i],
+                        p.Position,
+                        p.Map,
+                        ThingPlaceMode.Direct,
+                        ammoToUse,
+                        out var resultingThing
+                    )
+                    && !p.inventory.innerContainer.TryDrop(
+                        thingsToReload[i],
+                        p.Position,
+                        p.Map,
+                        ThingPlaceMode.Near,
+                        ammoToUse,
+                        out resultingThing
+                    )
+                )
                 {
                     continue; // cant generate item?
                 }
@@ -177,9 +190,13 @@ internal class reloadUtility
         try
         {
             reservableThings = RefuelWorkGiverUtility.FindEnoughReservableThings(
-                desiredQuantity: new IntRange(cp.MinAmmoNeeded(false), cp.MaxAmmoNeeded(false)), pawn: p,
+                desiredQuantity: new IntRange(cp.MinAmmoNeeded(false), cp.MaxAmmoNeeded(false)),
+                pawn: p,
                 rootCell: p.Position,
-                validThing: t => t.def == cp.AmmoDef && p.Position.DistanceTo(t.Position) <= yayoCombat.supplyAmmoDist);
+                validThing: t =>
+                    t.def == cp.AmmoDef
+                    && p.Position.DistanceTo(t.Position) <= yayoCombat.supplyAmmoDist
+            );
         }
         catch (Exception ex)
         {

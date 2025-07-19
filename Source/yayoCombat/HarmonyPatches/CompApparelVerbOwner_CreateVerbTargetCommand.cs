@@ -7,7 +7,12 @@ namespace yayoCombat.HarmonyPatches;
 [HarmonyPatch(typeof(CompApparelVerbOwner), nameof(CompApparelVerbOwner.CreateVerbTargetCommand))]
 internal class CompApparelVerbOwner_CreateVerbTargetCommand
 {
-    private static bool Prefix(ref Command_VerbTarget __result, CompApparelVerbOwner __instance, Thing gear, Verb verb)
+    private static bool Prefix(
+        ref Command_VerbTarget __result,
+        CompApparelVerbOwner __instance,
+        Thing gear,
+        Verb verb
+    )
     {
         if (__instance is not CompApparelReloadable compApparelReloadable)
         {
@@ -25,7 +30,7 @@ internal class CompApparelVerbOwner_CreateVerbTargetCommand
         {
             defaultDesc = gear.def.description,
             defaultLabel = verb.verbProps.label,
-            verb = verb
+            verb = verb,
         };
         if (verb.verbProps.defaultProjectile != null && verb.verbProps.commandIcon == null)
         {
@@ -37,12 +42,16 @@ internal class CompApparelVerbOwner_CreateVerbTargetCommand
             commandReloadable.defaultDesc = verb.verbProps.defaultProjectile.LabelCap;
             if (verb.verbProps.defaultProjectile.graphicData != null)
             {
-                commandReloadable.defaultIconColor = verb.verbProps.defaultProjectile.graphicData.color;
+                commandReloadable.defaultIconColor = verb.verbProps
+                    .defaultProjectile
+                    .graphicData
+                    .color;
             }
         }
         else
         {
-            commandReloadable.icon = verb.UIIcon != BaseContent.BadTex ? verb.UIIcon : gear.def.uiIcon;
+            commandReloadable.icon =
+                verb.UIIcon != BaseContent.BadTex ? verb.UIIcon : gear.def.uiIcon;
             commandReloadable.iconAngle = gear.def.uiIconAngle;
             commandReloadable.iconOffset = gear.def.uiIconOffset;
             commandReloadable.defaultIconColor = gear.DrawColor;
@@ -54,13 +63,20 @@ internal class CompApparelVerbOwner_CreateVerbTargetCommand
         }
         else if (verb.verbProps.violent && __instance.Wearer.WorkTagIsDisabled(WorkTags.Violent))
         {
-            commandReloadable.Disable("IsIncapableOfViolenceLower"
-                .Translate(__instance.Wearer.LabelShort, __instance.Wearer).CapitalizeFirst() + ".");
+            commandReloadable.Disable(
+                "IsIncapableOfViolenceLower"
+                    .Translate(__instance.Wearer.LabelShort, __instance.Wearer)
+                    .CapitalizeFirst() + "."
+            );
         }
         else if (!__instance.CanBeUsed(out _))
         {
-            commandReloadable.Disable(compApparelReloadable.DisabledReason(compApparelReloadable.MinAmmoNeeded(false),
-                compApparelReloadable.MaxAmmoNeeded(false)));
+            commandReloadable.Disable(
+                compApparelReloadable.DisabledReason(
+                    compApparelReloadable.MinAmmoNeeded(false),
+                    compApparelReloadable.MaxAmmoNeeded(false)
+                )
+            );
         }
 
         __result = commandReloadable;

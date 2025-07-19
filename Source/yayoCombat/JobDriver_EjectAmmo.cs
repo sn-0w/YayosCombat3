@@ -33,11 +33,17 @@ public class JobDriver_EjectAmmo : JobDriver
         }
 
         yield return Toils_JobTransforms.ExtractNextTargetFromQueue(TargetIndex.A);
-        yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.ClosestTouch)
-            .FailOnDespawnedNullOrForbidden(TargetIndex.A).FailOnSomeonePhysicallyInteracting(TargetIndex.A);
-        yield return Toils_Haul.StartCarryThing(TargetIndex.A, false, true)
+        yield return Toils_Goto
+            .GotoThing(TargetIndex.A, PathEndMode.ClosestTouch)
+            .FailOnDespawnedNullOrForbidden(TargetIndex.A)
+            .FailOnSomeonePhysicallyInteracting(TargetIndex.A);
+        yield return Toils_Haul
+            .StartCarryThing(TargetIndex.A, false, true)
             .FailOnDestroyedNullOrForbidden(TargetIndex.A);
-        yield return Toils_Jump.JumpIf(getNextIngredient, () => !job.GetTargetQueue(TargetIndex.A).NullOrEmpty());
+        yield return Toils_Jump.JumpIf(
+            getNextIngredient,
+            () => !job.GetTargetQueue(TargetIndex.A).NullOrEmpty()
+        );
         foreach (var item2 in f.EjectAsMuchAsPossible(comp))
         {
             yield return item2;
@@ -50,24 +56,36 @@ public class JobDriver_EjectAmmo : JobDriver
                 var carriedThing = pawn.carryTracker.CarriedThing;
                 if (carriedThing is { Destroyed: false })
                 {
-                    pawn.carryTracker.TryDropCarriedThing(pawn.Position, ThingPlaceMode.Near, out var _);
+                    pawn.carryTracker.TryDropCarriedThing(
+                        pawn.Position,
+                        ThingPlaceMode.Near,
+                        out var _
+                    );
                 }
             },
-            defaultCompleteMode = ToilCompleteMode.Instant
+            defaultCompleteMode = ToilCompleteMode.Instant,
         };
     }
 
     private IEnumerable<Toil> EjectAsMuchAsPossible(CompApparelReloadable comp)
     {
         var done = Toils_General.Label();
-        yield return Toils_Jump.JumpIf(done,
-            () => pawn.carryTracker.CarriedThing == null ||
-                  pawn.carryTracker.CarriedThing.stackCount < comp.MinAmmoNeeded(true));
-        yield return Toils_General.Wait(comp.Props.baseReloadTicks).WithProgressBarToilDelay(TargetIndex.A);
+        yield return Toils_Jump.JumpIf(
+            done,
+            () =>
+                pawn.carryTracker.CarriedThing == null
+                || pawn.carryTracker.CarriedThing.stackCount < comp.MinAmmoNeeded(true)
+        );
+        yield return Toils_General
+            .Wait(comp.Props.baseReloadTicks)
+            .WithProgressBarToilDelay(TargetIndex.A);
         yield return new Toil
         {
-            initAction = delegate { reloadUtility.EjectAmmoAction(GetActor(), comp); },
-            defaultCompleteMode = ToilCompleteMode.Instant
+            initAction = delegate
+            {
+                reloadUtility.EjectAmmoAction(GetActor(), comp);
+            },
+            defaultCompleteMode = ToilCompleteMode.Instant,
         };
         yield return done;
     }
